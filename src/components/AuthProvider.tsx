@@ -1,11 +1,12 @@
 import { createContext, PropsWithChildren, useContext, useEffect, useLayoutEffect, useState } from "react";
 import { User } from "../types/user";
 import { api } from "../services/api/api";
+import { AxiosError } from "axios";
 
 type AuthContext = {
     currentUser?: User | null;
-    handleLogin: (email: string, password: string) => Promise<void>
-    handleLogout: () => Promise<void>
+    handleLogin: (email: string, password: string) => Promise<{ error: boolean, message: string }>
+    handleLogout: () => Promise<{ error: boolean, message: string }>
 }
 type AuthProviderProps = PropsWithChildren
 
@@ -35,7 +36,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
             async (error) => {
                 const originalRequestConfig = error.config;
 
-                if (error.response.status === 401) {
+                if (error.response.status === 401 && !originalRequestConfig._retry) {
                     originalRequestConfig._retry = true
 
                     try {
@@ -59,8 +60,16 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         try {
             const response = await api.post("/auth/login", { email, password })
             setCurrentUser(response.data)
-        } catch {
+            return { error: false, message: 'success' }
+        } catch (err) {
+
             setCurrentUser(null)
+
+            if ((err as AxiosError).response?.data) {
+                return { error: true, message: (err as any).response?.data.message }
+            }
+
+            return { error: true, message: "Unable to login due some internal reasons, please try again later" }
         }
     }
 
@@ -68,7 +77,10 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         try {
             await api.post('/auth/logout')
             setCurrentUser(null)
-        } catch { }
+            return { error: false, message: 'success' }
+        } catch (err) {
+            return { error: true, message: (err as Error).message ?? "Unable to logout due some internal reasons, please try again later" }
+        }
     }
 
     const authProvierValues = {

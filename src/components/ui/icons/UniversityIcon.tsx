@@ -1,6 +1,9 @@
-const UniversityIcon = () => {
+import { IconProps } from "./icon-props"
+
+
+const UniversityIcon = ({...props }: IconProps) => {
     return (
-        <svg fill="#000000" height="24px" width="24px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink"
+        <svg {...props} widths={`${props.width ? props.width : '24px'}`} height={`${props.height ? props.height : '24px'}`} version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink"
             viewBox="0 0 512 512" xmlSpace="preserve">
             <g>
                 <g>

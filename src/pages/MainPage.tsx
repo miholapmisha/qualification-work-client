@@ -1,45 +1,67 @@
 import { useAuth } from "../components/AuthProvider";
-import UniversityIcon from "../components/ui/sidebar/icons/UniversityIcon";
-import UsersIcon from "../components/ui/sidebar/icons/UsersIcon";
+import LogoutIcon from "../components/ui/icons/LogoutIcon";
+import UniversityIcon from "../components/ui/icons/UniversityIcon";
+import UsersIcon from "../components/ui/icons/UsersIcon";
 import Sidebar from "../components/ui/sidebar/Sidebar";
-import { roles } from "../types/user";
+import { SidebarOptionType } from "../components/ui/sidebar/SidebarOption";
+import { Role } from "../types/user";
 
-// title: string,
-//     textOptionClasses?: string
-//     onOptionClick: () => void,
-//     icon: React.ElementType
-//     iconClasses?: string
+const getSideBarOptions = (sidebarOptionsByRoles: { [role: string]: SidebarOptionType[] }, userRoles: Role[]) => {
 
+  let sidebarOptions: SidebarOptionType[] = []
 
-
-const sidebarOptionsByRoles = {
-  [roles.ADMIN]: [
-    {
-      title: "System",
-      onOptionClick: () => { },
-      icon: UniversityIcon
-    },
-    {
-      title: "Users",
-      onOptionClick: () => { },
-      icon: UsersIcon
+  userRoles.forEach((role) => {
+    if (sidebarOptionsByRoles[role]) {
+      sidebarOptions = [...sidebarOptions, ...sidebarOptionsByRoles[role]];
     }
-  ],
-  [roles.TEACHER]: [
+  })
 
-  ],
-  [roles.STUDENT]: [
-
-  ]
+  return sidebarOptions
 }
 
 const MainPage = () => {
 
-  const { currentUser } = useAuth()
+  const { currentUser, handleLogout } = useAuth()
+
+  const sidebarOptionsByRoles = {
+    [Role.ADMIN.toString()]: [
+      {
+        title: "System",
+        onOptionClick: () => { },
+        icon: UniversityIcon
+      },
+      {
+        title: "Users",
+        onOptionClick: () => { },
+        icon: UsersIcon
+      }
+    ],
+    [Role.TEACHER.toString()]: [
+      {
+        title: "Surveys",
+        onOptionClick: () => { },
+        icon: UsersIcon
+      }
+    ],
+    [Role.STUDENT.toString()]: [
+
+    ]
+  }
+
+  const preferenceOptions: SidebarOptionType[] = [
+    {
+      icon: LogoutIcon,
+      title: "Logout",
+      onOptionClick: () => handleLogout()
+    }
+  ]
+
+  const defaultOptions = getSideBarOptions(sidebarOptionsByRoles, currentUser?.roles ?? [])
 
   return (
-    <div className="flex w-full h-screen">
-      <Sidebar options={sidebarOptionsByRoles[roles.ADMIN]} />
+    <div className="flex w-full min-h-screen">
+      <Sidebar defaultOptions={defaultOptions} preferenceOptions={preferenceOptions} />
+      
     </div>
   );
 }

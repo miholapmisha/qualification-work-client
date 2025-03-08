@@ -14,7 +14,7 @@
   }
 
   html, body {
-    @apply h-full w-full bg-gray-100 text-gray-900 antialiased;
+    @apply h-full w-full bg-gray-200 text-gray-900 antialiased;
   }
 
   #root {

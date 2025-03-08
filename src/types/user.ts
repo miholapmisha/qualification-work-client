@@ -1,4 +1,4 @@
-export enum roles {
+export enum Role {
     ADMIN = "admin",
     STUDENT = "student",
     TEACHER = "teacher",
@@ -9,5 +9,5 @@ export type User = {
     id: number;
     email: string;
     name: string;
-    roles: roles[];
+    roles: Role[];
 };

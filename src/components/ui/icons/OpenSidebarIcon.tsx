@@ -1,7 +1,9 @@
-const OpenSidebarIcon = () => {
-    
+import { IconProps } from "./icon-props"
+
+const OpenSidebarIcon = ({ ...props }: IconProps) => {
+
     return (
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg {...props} widths={`${props.width ? props.width : '24px'}`} height={`${props.height ? props.height : '24px'}`} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
                 d="M14.8285 12.0259L16.2427 13.4402L12 17.6828L7.7574 13.4402L9.17161 12.0259L11 13.8544V6.31724H13V13.8544L14.8285 12.0259Z"
                 fill="#000000"
