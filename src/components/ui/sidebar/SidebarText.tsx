@@ -4,7 +4,7 @@ type SidebarOptionTextProps = {
     classes?: string
 }
 
-const SidebarOptionText = ({ onOptionClick, classes, title }: SidebarOptionTextProps) => {
+const SidebarText = ({ onOptionClick, classes, title }: SidebarOptionTextProps) => {
     return (
         <div onClick={onOptionClick} className={`w-full ${classes} border-l-1 rounded-r cursor-pointer flex items-center justify-center h-12 hover:bg-gray-100`}>
             <span className='text-xl'>{title}</span>
@@ -12,4 +12,4 @@ const SidebarOptionText = ({ onOptionClick, classes, title }: SidebarOptionTextP
     )
 }
 
-export default SidebarOptionText
+export default SidebarText

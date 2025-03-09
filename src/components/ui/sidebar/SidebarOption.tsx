@@ -1,5 +1,5 @@
 import SidebarIcon from "./SidebarIcon"
-import SidebarOptionText from "./SidebarOptionText"
+import SidebarText from "./SidebarText"
 
 export type SidebarOptionType = {
     title: string,
@@ -20,7 +20,7 @@ const SidebarOption = ({ showTextOption, data }: SidebarOptionProps) => {
         <>
 
             {showTextOption ?
-                <SidebarOptionText title={data.title} classes={data.textOptionClasses} onOptionClick={data.onOptionClick} />
+                <SidebarText title={data.title} classes={data.textOptionClasses} onOptionClick={data.onOptionClick} />
                 :
                 <SidebarIcon icon={data.icon} classes={data.iconClasses} onClickIcon={data.onOptionClick} />
             }

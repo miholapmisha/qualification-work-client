@@ -28,7 +28,7 @@ const Sidebar = ({ defaultOptions, preferenceOptions }: SidebarProps) => {
 
     return (
         <div className={`h-screen sticky top-0 ${sidebarState.isExpanded ? 'w-[256px] px-8' : 'w-15 px-2'
-            } bg-gray-50 flex flex-col rounded-2xl py-8  transition-all duration-400 ease-in-out space-y-8`}>
+            } bg-gray-50 flex flex-col rounded-r-2xl py-8  transition-all duration-400 ease-in-out space-y-8`}>
             <div className='flex justify-center items-center'>
                 <SidebarIcon
                     onClickIcon={() => setSidebarState(prevState => ({ ...prevState, isExpanded: !prevState.isExpanded }))}

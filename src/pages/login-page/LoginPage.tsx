@@ -10,6 +10,7 @@ export type LoginInputs = {
 }
 
 const LoginPage = () => {
+    
     const { handleLogin } = useAuth()
     const [loginError, setLoginError] = useState<string | null>(null)
     const [loading, setLoading] = useState(false)
