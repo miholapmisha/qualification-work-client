@@ -1,11 +1,13 @@
 import { ButtonHTMLAttributes, PropsWithChildren } from "react"
 
-type ButtonProps = PropsWithChildren<ButtonHTMLAttributes<HTMLButtonElement>>
+type ButtonProps = {
+    classes?: string
+} & PropsWithChildren<ButtonHTMLAttributes<HTMLButtonElement>>
 
-const Button = ({ children, ...props }: ButtonProps) => {
+const Button = ({ children, classes, ...props }: ButtonProps) => {
 
     return (
-        <button className="w-full h-full cursor-pointer hover:bg-gray-800 bg-black text-white rounded px-4 py-2" {...props}>{children}</button>
+        <button className={`${classes ? classes : ''} cursor-pointer hover:bg-primary-800 bg-black text-white rounded px-4 py-2`} {...props}>{children}</button>
     )
 }
 

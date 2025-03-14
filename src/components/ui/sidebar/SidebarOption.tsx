@@ -2,6 +2,7 @@ import SidebarIcon from "./SidebarIcon"
 import SidebarText from "./SidebarText"
 
 export type SidebarOptionType = {
+    selected?: boolean
     title: string,
     textOptionClasses?: string
     onOptionClick: () => void,
@@ -11,18 +12,19 @@ export type SidebarOptionType = {
 
 type SidebarOptionProps = {
     showTextOption: boolean,
-    data: SidebarOptionType
+    data: SidebarOptionType,
+    selected?: boolean
 }
 
-const SidebarOption = ({ showTextOption, data }: SidebarOptionProps) => {
+const SidebarOption = ({ showTextOption, data, selected }: SidebarOptionProps) => {
 
     return (
         <>
 
             {showTextOption ?
-                <SidebarText title={data.title} classes={data.textOptionClasses} onOptionClick={data.onOptionClick} />
+                <SidebarText selected={selected} title={data.title} classes={data.textOptionClasses} onOptionClick={data.onOptionClick} />
                 :
-                <SidebarIcon icon={data.icon} classes={data.iconClasses} onClickIcon={data.onOptionClick} />
+                <SidebarIcon selected={selected} icon={data.icon} classes={data.iconClasses} onClickIcon={data.onOptionClick} />
             }
         </>
     )

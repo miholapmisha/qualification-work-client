@@ -1,12 +1,12 @@
 import { createContext, PropsWithChildren, useContext, useEffect, useLayoutEffect, useState } from "react";
 import { User } from "../types/user";
 import { api } from "../services/api/api";
-import { AxiosError } from "axios";
+import { AuthResponse, login, logout } from "../services/api/auth";
 
 type AuthContext = {
     currentUser?: User | null;
-    handleLogin: (email: string, password: string) => Promise<{ error: boolean, message: string }>
-    handleLogout: () => Promise<{ error: boolean, message: string }>
+    handleLogin: (email: string, password: string) => Promise<AuthResponse>
+    handleLogout: () => Promise<AuthResponse>
 }
 type AuthProviderProps = PropsWithChildren
 
@@ -56,31 +56,25 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     }, [])
 
     const handleLogin = async (email: string, password: string) => {
+        const response = await login(email, password)
 
-        try {
-            const response = await api.post("/auth/login", { email, password })
-            setCurrentUser(response.data)
-            return { error: false, message: 'success' }
-        } catch (err) {
-
+        if(!response.error) {
+            setCurrentUser(response.data.payload)
+        } else {
             setCurrentUser(null)
-
-            if ((err as AxiosError).response?.data) {
-                return { error: true, message: (err as any).response?.data.message }
-            }
-
-            return { error: true, message: "Unable to login due some internal reasons, please try again later" }
         }
+
+        return response
     }
 
     const handleLogout = async () => {
-        try {
-            await api.post('/auth/logout')
+        const response = await logout()
+
+        if(!response.error) {
             setCurrentUser(null)
-            return { error: false, message: 'success' }
-        } catch (err) {
-            return { error: true, message: (err as Error).message ?? "Unable to logout due some internal reasons, please try again later" }
         }
+
+        return response
     }
 
     const authProvierValues = {

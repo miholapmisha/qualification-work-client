@@ -1,40 +1,60 @@
-import { useState } from "react"
 import LoginForm from "./LoginForm"
 import { useAuth } from "../../components/AuthProvider"
-import { useNavigate } from "react-router-dom"
-import AlertBlock from "../../components/ui/AlertBlock"
-
-export type LoginInputs = {
-    email: string,
-    password: string
-}
+import { User } from "../../types/user"
+import { Navigate, useLocation } from "react-router-dom"
+import PageLoader from "../../components/PageLoader"
+import { routesByPriority } from "../../routes/route-config"
 
 const LoginPage = () => {
-    
-    const { handleLogin } = useAuth()
-    const [loginError, setLoginError] = useState<string | null>(null)
-    const [loading, setLoading] = useState(false)
-    const navigate = useNavigate()
 
-    const onSubmit = async (data: LoginInputs) => {
-        setLoading(true)
-        const { message, error } = await handleLogin(data.email, data.password)
-        setLoading(false)
-        if (error) {
-            setLoginError(message)
-            return
+    const { currentUser } = useAuth()
+    const { search } = useLocation()
+
+    const getRedirectRoute = (loggedInUser: User) => {
+        const { roles: userRoles } = loggedInUser
+
+        for (const { routes, role } of routesByPriority) {
+            if (userRoles.includes(role)) {
+
+                if (routes.length > 0) {
+
+                    const baseRoute = routes[0]
+                    if (baseRoute.children && baseRoute.children.length > 0) {
+                        const firstChild = baseRoute.children[0]
+                        if ('path' in firstChild) {
+                            return firstChild.path
+                        }
+                    }
+
+                    if ('path' in baseRoute) {
+                        return baseRoute.path as string
+                    }
+                }
+            }
         }
-        navigate('/')
+
+        return '/'
     }
 
-    return (
-        <div className="flex w-full h-screen">
-            <div className="relative m-auto w-full max-w-lg">
-                <LoginForm onSubmit={onSubmit} loading={loading} />
-                <AlertBlock key={loginError} onCloseAlert={() => setLoginError(null)} alertMessage={loginError}></AlertBlock>
+    if (currentUser === undefined) {
+        return <PageLoader />
+    }
+
+    if (currentUser === null) {
+        return (
+            <div className="flex w-full h-screen">
+                <LoginForm />
             </div>
-        </div>
-    )
+        )
+    }
+
+    if (search.includes('redirect') && new URLSearchParams(search).get('redirect')) {
+        const redirectPath = new URLSearchParams(search).get('redirect') as string
+        return <Navigate to={redirectPath} />
+    }
+
+    return <Navigate to={getRedirectRoute(currentUser)} />
+
 }
 
 export default LoginPage

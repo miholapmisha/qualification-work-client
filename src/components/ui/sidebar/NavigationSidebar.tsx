@@ -8,7 +8,7 @@ type SidebarProps = {
     preferenceOptions?: SidebarOptionType[]
 }
 
-const Sidebar = ({ defaultOptions, preferenceOptions }: SidebarProps) => {
+const NavigationSidebar = ({ defaultOptions, preferenceOptions }: SidebarProps) => {
 
     const [sidebarState, setSidebarState] = useState({
         isExpanded: false,
@@ -27,8 +27,8 @@ const Sidebar = ({ defaultOptions, preferenceOptions }: SidebarProps) => {
     }, [sidebarState.isExpanded])
 
     return (
-        <div className={`h-screen sticky top-0 ${sidebarState.isExpanded ? 'w-[256px] px-8' : 'w-15 px-2'
-            } bg-gray-50 flex flex-col rounded-r-2xl py-8  transition-all duration-400 ease-in-out space-y-8`}>
+        <div className={`max-h-screen sticky top-0 ${sidebarState.isExpanded ? 'w-[256px] px-8' : 'w-15 px-2'
+            } bg-primary-50 flex flex-col rounded-r-2xl py-8  transition-all duration-400 ease-in-out space-y-8`}>
             <div className='flex justify-center items-center'>
                 <SidebarIcon
                     onClickIcon={() => setSidebarState(prevState => ({ ...prevState, isExpanded: !prevState.isExpanded }))}
@@ -38,7 +38,7 @@ const Sidebar = ({ defaultOptions, preferenceOptions }: SidebarProps) => {
 
             <div className='flex flex-col'>
                 {defaultOptions && defaultOptions.map((option, index) => (
-                    <SidebarOption key={index} showTextOption={sidebarState.showText} data={{ ...option }} />
+                    <SidebarOption selected={option.selected} key={index} showTextOption={sidebarState.showText} data={{ ...option }} />
                 ))}
             </div>
 
@@ -51,4 +51,4 @@ const Sidebar = ({ defaultOptions, preferenceOptions }: SidebarProps) => {
     )
 }
 
-export default Sidebar
+export default NavigationSidebar

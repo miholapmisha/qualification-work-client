@@ -5,13 +5,14 @@ type InputProps =
     {
         label?: string,
         error?: FieldError
+        classes?: string
     }
     & PropsWithChildren<InputHTMLAttributes<HTMLInputElement>>
 
-const Input = ({ label, error, ...props }: InputProps) => {
+const Input = ({ classes, label, error, ...props }: InputProps) => {
 
     return (
-        <div className="space-y-1 h-14">
+        <div className={`${classes ? classes : ''} space-y-1 h-full`}>
             <div className="relative w-full h-12 flex flex-col justify-center box-border">
                 <input
                     className={`${error?.message ? 'border-red-600' : 'focus:border-black border-gray-300'} peer w-full h-full outline-none  border rounded px-4`}
