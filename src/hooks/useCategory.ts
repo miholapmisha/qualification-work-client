@@ -3,6 +3,8 @@ import { createCategories, deleteCategory, fetchCategories, updateCategory } fro
 import { ApiResponse } from "../services/api/common"
 import { Category } from "../types/category"
 import { useState } from "react"
+import { defaultPathSeparator } from "../pages/system-page/common"
+import { getParentId, isDescendant } from "../services/category"
 
 type useCategoryProps = {
     queryKey: any[],
@@ -13,6 +15,7 @@ type useCategoryProps = {
 export const useCategory = ({ queryKey, fetchParams, enabled }: useCategoryProps) => {
     const queryClient = useQueryClient()
     const [proceedingCategoriesIds, setProceedingCategoriesIds] = useState<string[]>([])
+    const [parentIdsCreatingCategories, setParentIdsCreatingCategories] = useState<string[]>([])
 
     const { data: response, isLoading: fetchingCategories } = useQuery({
         queryFn: () => fetchCategories(fetchParams),
@@ -20,9 +23,22 @@ export const useCategory = ({ queryKey, fetchParams, enabled }: useCategoryProps
         enabled
     })
 
-    const { mutateAsync: createCategoriesMutation, isPending: addingCategories } = useMutation({
-        mutationFn: createCategories,
-        onSuccess: (response: ApiResponse<Category[]>) => {
+    const { mutateAsync: createCategoriesMutation } = useMutation({
+        mutationFn: (categories: Category[]) => {
+
+            setParentIdsCreatingCategories(prevIds => {
+                const parentIds = categories.map(category => getParentId(category, defaultPathSeparator))
+                return [...prevIds, ...parentIds]
+            })
+
+            return createCategories(categories)
+        },
+        onSuccess: (response: ApiResponse<Category[]>, context) => {
+            const categories = context
+            setParentIdsCreatingCategories(prevIds => {
+                const parentIds = categories.map(category => getParentId(category, defaultPathSeparator))
+                return prevIds.filter(id => !parentIds.includes(id))
+            })
 
             queryClient.setQueryData(queryKey, (oldData: ApiResponse<Category[] | undefined>) => {
 
@@ -55,7 +71,8 @@ export const useCategory = ({ queryKey, fetchParams, enabled }: useCategoryProps
                     ...oldData,
                     data: {
                         message: response.data.message,
-                        payload: oldData.data.payload?.filter(category => category._id !== deletionId)
+                        payload: oldData.data.payload?.filter(category =>
+                            category._id !== deletionId && !isDescendant(category, deletionId, defaultPathSeparator))
                     }
                 }
 
@@ -70,7 +87,6 @@ export const useCategory = ({ queryKey, fetchParams, enabled }: useCategoryProps
         },
         onSuccess: (response, context) => {
             const editionId = context._id
-
             setProceedingCategoriesIds(prevIds => prevIds.filter(id => id !== editionId))
             queryClient.setQueryData(queryKey, (oldData: ApiResponse<Category[] | undefined>) => {
                 if (response.error) {
@@ -106,9 +122,9 @@ export const useCategory = ({ queryKey, fetchParams, enabled }: useCategoryProps
         categories: response?.data.payload,
         error: response?.error,
         message: response?.data.message,
+        parentIdsCreatingCategories,
         proceedingCategoriesIds: proceedingCategoriesIds,
         createCategories: createCategoriesMutation,
-        addingCategories,
         deleteCategory: deleteCategoryMutation,
         updateCategory: updateCategoryMutation
     }

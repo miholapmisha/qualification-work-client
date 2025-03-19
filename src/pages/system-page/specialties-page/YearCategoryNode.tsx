@@ -3,27 +3,21 @@ import { Category, CategoryType, TreeCategory } from "../../../types/category"
 import Button from "../../../components/ui/Button"
 import Loader from "../../../components/ui/Loader"
 import { defaultPathSeparator } from "../common"
+import { useSpecialties } from "./SpecialtyProvider"
+import GroupItem from "./GroupItem"
 
 type YearCategoryNodeProps = {
     yearCategory: TreeCategory,
-    createCategory: any
 }
 
-const mock: TreeCategory[] = [
-    { _id: crypto.randomUUID(), name: "Group SE-201", categoryType: CategoryType.GROUP, children: [], path: '' },
-    { _id: crypto.randomUUID(), name: "Group SE-202", categoryType: CategoryType.GROUP, children: [], path: '' },
-]
-
-const YearCategoryNode = ({ yearCategory, createCategory }: YearCategoryNodeProps) => {
+const YearCategoryNode = ({ yearCategory }: YearCategoryNodeProps) => {
 
     const [showGroupNameInput, setShowGroupNameInput] = useState(false)
-    const [showLoader, setShowLoader] = useState(false)
     const groupNameInputRef = useRef<HTMLInputElement>(null)
-
     const groups = yearCategory.children
+    const { createCategories: createGroup, parentIdsCreatingCategories } = useSpecialties()
 
     const handleSaveGroup = async (name: string) => {
-        setShowLoader(true);
         setShowGroupNameInput(false)
 
         const group: Category = {
@@ -33,22 +27,18 @@ const YearCategoryNode = ({ yearCategory, createCategory }: YearCategoryNodeProp
             path: yearCategory.path + defaultPathSeparator + yearCategory._id
         }
 
-        await createCategory([group])
-        setShowLoader(false);
+        await createGroup([group])
     }
 
+    const showLoader = parentIdsCreatingCategories.includes(yearCategory._id)
+
     return (
-        <div className="py-4 pl-10 pr-4 space-y-5 border-primary-300 rounded-l-2xl border-y-1 border-l-1 border-dashed flex flex-col bg-gray-50 shadow-inner">
-            {groups.length > 0 &&
-                <div className="space-y-3">
-                    {groups.map((group, index) => (
-                        <div key={index} className="cursor-pointer font-light text-gray-800 hover:text-primary-600 transition-colors">
-                            <span className="border-b border-gray-300 hover:border-primary-400 pb-1">{group.name}</span>
-                            {<a className="text-red-600 hover:underline" onClick={(e) => { e.stopPropagation(); console.log("delete") }}>Delete</a>}
-                        </div>
-                    ))}
+        <div className="animate-flip-down animate-duration-[600ms] py-4 pl-10 pr-4 space-y-5 border-primary-300 rounded-l-2xl border-y-1 border-l-1 border-dashed flex flex-col bg-gray-50 shadow-inner">
+            {groups.length > 0 && (
+                <div className="space-y-4">
+                    {groups.map((group) => (<GroupItem key={group._id} group={group} />))}
                 </div>
-            }
+            )}
 
 
             {showLoader && (
@@ -67,7 +57,8 @@ const YearCategoryNode = ({ yearCategory, createCategory }: YearCategoryNodeProp
                     />
                     <div className="flex space-x-3">
                         <Button
-                            className="cursor-pointer px-4 bg-primary-50 border border-primary-300 rounded text-primary-600 hover:bg-primary-100 transition-colors"
+                            disabled={groupNameInputRef.current?.value === ''}
+                            className="hover:bg-black hover:text-white cursor-pointer px-4 bg-primary-50 border border-primary-300 rounded text-primary-600 transition-colors"
                             onClick={() => {
                                 if (groupNameInputRef.current) {
                                     handleSaveGroup(groupNameInputRef.current.value)

@@ -1,29 +1,25 @@
-import { useSearchParams } from "react-router-dom"
 import Button from "../../../components/ui/Button"
 import Loader from "../../../components/ui/Loader"
-import { useEffect, useState } from "react"
+import { useCallback, useState } from "react"
 import AddSpecialtyModal, { SpecialtyCreationData } from "./AddSpecialtyModal"
 import CategoryNode from "./CategoryNode"
 import { Category, CategoryType } from "../../../types/category"
 import { defaultPathSeparator } from "../common"
 import { buildCategoryTree } from "../../../services/category"
-import { useCategory } from "../../../hooks/useCategory"
 import AlertBlock from "../../../components/ui/AlertBlock"
+import { useSpecialties } from "./SpecialtyProvider"
 
 const SpecialtiesPage = () => {
-    const [searchParams] = useSearchParams();
     const [openAddSpecialtyModal, setOpenAddSpecialtyModal] = useState(false);
-    const facultyId = searchParams.get('facultyId');
 
     const {
-        proceedingCategoriesIds,
+        parentIdsCreatingCategories,
         fetchingCategories: loadingSpecialties,
         categories,
         createCategories,
-        addingCategories,
         error: specialtyError,
         message
-    } = useCategory({ fetchParams: { parentId: facultyId }, queryKey: ['specialties', facultyId], enabled: !!facultyId })
+    } = useSpecialties()
 
 
     const facultyData = categories ? categories[0] : undefined
@@ -67,11 +63,11 @@ const SpecialtiesPage = () => {
         await createCategories(categories);
     };
 
-    const treeCategories = buildCategoryTree(specialties, defaultPathSeparator)
+    const treeCategories = useCallback(() => {
+        return buildCategoryTree(specialties, defaultPathSeparator)
+    }, [specialties])
 
-    useEffect(() => {
-        console.log("Proceeding: ", proceedingCategoriesIds)
-    }, [proceedingCategoriesIds])
+    const addingCategories = facultyData?._id ? parentIdsCreatingCategories.includes(facultyData._id) : false
 
     return (
         <>
@@ -96,19 +92,21 @@ const SpecialtiesPage = () => {
                         no specialties for faculty
                     </h1>}
                     <div className="">
-                        {treeCategories && treeCategories?.length > 0 && treeCategories.map((specialty) =>
-                            <CategoryNode createCategory={createCategories} category={specialty} key={specialty._id} initial={true} />)}
+                        {treeCategories && treeCategories()?.length > 0 && treeCategories().map((specialty) =>
+                            <CategoryNode category={specialty} key={specialty._id} initial={true} />)}
                     </div>
 
                 </div>
                 <div className="m-auto max-w-[152px]">
-                    <Button disabled={addingCategories} onClick={() => { setOpenAddSpecialtyModal(true) }}>
+                    <Button classes="flex items-center space-x-2" disabled={addingCategories} onClick={() => { setOpenAddSpecialtyModal(true) }}>
                         {addingCategories ?
-                            <span>Creating...</span>
+                            <>
+                                <span>Creating...</span>
+                                <Loader size={{ width: '16px', height: '16px' }} />
+                            </>
                             :
                             <span>+ Add specialty</span>
                         }
-
                     </Button>
                 </div>
             </div>

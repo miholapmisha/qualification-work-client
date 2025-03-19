@@ -19,7 +19,6 @@ export const FacultiesPage = () => {
         deleteCategory: deleteFaculty,
         updateCategory: updateFaculty,
         createCategories: createFaculty,
-        addingCategories: addingFaculty,
         error,
         message,
         proceedingCategoriesIds: proceedingFacultiesIds
@@ -60,7 +59,7 @@ export const FacultiesPage = () => {
 
                             {renderFaculties(faculties || [])}
 
-                            {addingFaculty && Array.from({ length: creatingFacultyCount }).map((_, index) => <LoaderCard key={index} />)}
+                            {creatingFacultyCount > 0 && Array.from({ length: creatingFacultyCount }).map((_, index) => <LoaderCard key={index} />)}
 
                             {showAddFacultyForm && <FacultyForm onCancel={() => setShowFaculyForm(false)} onSaveFaculty={async (category) => {
                                 setShowFaculyForm(false)

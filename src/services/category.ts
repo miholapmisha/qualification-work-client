@@ -19,8 +19,7 @@ export const buildCategoryTree = (categories: Category[], pathSeparator: string 
         if (!category.path || category.path === '') {
             rootCategories.push(treeCategory);
         } else {
-            const pathParts = category.path.split(pathSeparator);
-            const parentId = pathParts[pathParts.length - 1];
+            const parentId = getParentId(category, pathSeparator)
 
             if (parentId && categoryMap[parentId]) {
                 categoryMap[parentId].children.push(treeCategory);
@@ -30,26 +29,35 @@ export const buildCategoryTree = (categories: Category[], pathSeparator: string 
         }
     });
 
+    return rootCategories;
+}
 
-    const sortCategories = (categories: TreeCategory[]): TreeCategory[] => {
-        const typeOrder = {
-            [CategoryType.FACULTY]: 1,
-            [CategoryType.SPECIALTY]: 2,
-            [CategoryType.DEGREE]: 3,
-            [CategoryType.YEAR]: 4,
-            [CategoryType.GROUP]: 5
-        };
+export const getParentId = (category: Category, pathSeparator: string) => {
+    const pathParts = category.path.split(pathSeparator);
+    return pathParts[pathParts.length - 1];
+}
 
-        return categories.sort((a, b) => {
-            const typeComparison = (typeOrder[a.categoryType] || 99) - (typeOrder[b.categoryType] || 99);
-            if (typeComparison !== 0) return typeComparison;
+export const isDescendant = (category: Category, parentId: string, defaultPathSeparator: string): boolean => {
+    const pathParts = category.path.split(defaultPathSeparator)
+    return pathParts.includes(parentId)
+}
 
-            return a.name.localeCompare(b.name);
-        }).map(category => ({
-            ...category,
-            children: sortCategories(category.children)
-        }));
+export const sortCategories = (categories: TreeCategory[]): TreeCategory[] => {
+    const typeOrder = {
+        [CategoryType.FACULTY]: 1,
+        [CategoryType.SPECIALTY]: 2,
+        [CategoryType.DEGREE]: 3,
+        [CategoryType.YEAR]: 4,
+        [CategoryType.GROUP]: 5
     };
 
-    return sortCategories(rootCategories);
-}
+    return categories.sort((a, b) => {
+        const typeComparison = (typeOrder[a.categoryType] || 99) - (typeOrder[b.categoryType] || 99);
+        if (typeComparison !== 0) return typeComparison;
+
+        return a.name.localeCompare(b.name);
+    }).map(category => ({
+        ...category,
+        children: sortCategories(category.children)
+    }));
+};
