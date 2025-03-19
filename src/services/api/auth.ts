@@ -1,15 +1,8 @@
-import { AxiosError } from "axios";
 import { api } from "./api";
+import { User } from "../../types/user";
+import { ApiResponse, handleError } from "./common";
 
-export type AuthResponse = {
-    error: boolean;
-    data: {
-        message: string;
-        payload: any;
-    };
-};
-
-export const login = async (email: string, password: string): Promise<AuthResponse> => {
+export const login = async (email: string, password: string): Promise<ApiResponse<User>> => {
     try {
         const response = await api.post("/auth/login", { email, password });
 
@@ -26,21 +19,13 @@ export const login = async (email: string, password: string): Promise<AuthRespon
     }
 };
 
-export const logout = async (): Promise<AuthResponse> => {
+export const logout = async (): Promise<ApiResponse<User>> => {
     try {
         await api.post('/auth/logout');
-        return { error: false, data: { message: 'Success', payload: {} } };
+        return { error: false, data: { message: 'Success' } };
     } catch (err) {
         const defaultMessage = "Unable to logout due to some internal reasons, please try again later";
         return handleError(err, defaultMessage);
     }
-};
-
-const handleError = (err: unknown, defaultMessage: string): AuthResponse => {
-    if (err instanceof AxiosError && err.response?.data) {
-        const message = err.response.data.message || defaultMessage;
-        return { error: true, data: { message, payload: {} } };
-    }
-    return { error: true, data: { message: defaultMessage, payload: {} } };
 };
 

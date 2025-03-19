@@ -1,6 +1,7 @@
 import PageLayout from "../components/PageLayout";
 import ProtectedRoute from "../components/ProtectedRoute";
-import { FacultyPage } from "../pages/system-page/faculties-page/FacultyPage";
+import { FacultiesPage } from "../pages/system-page/faculties-page/FacultiesPage";
+import SpecialtiesPage from "../pages/system-page/specialties-page/SpecialtiesPage";
 import SystemPage from "../pages/system-page/SystemPage";
 import UsersPage from "../pages/users-page/UsersPage";
 import { Role } from "../types/user";
@@ -19,7 +20,11 @@ export const adminRoutes = [
                 children: [
                     {
                         path: '',
-                        element: <FacultyPage />
+                        element: <FacultiesPage />
+                    },
+                    {
+                        path: 'specialties',
+                        element: <SpecialtiesPage/>
                     }
                 ]
             },

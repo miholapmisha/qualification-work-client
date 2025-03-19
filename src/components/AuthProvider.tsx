@@ -1,12 +1,13 @@
 import { createContext, PropsWithChildren, useContext, useEffect, useLayoutEffect, useState } from "react";
 import { User } from "../types/user";
 import { api } from "../services/api/api";
-import { AuthResponse, login, logout } from "../services/api/auth";
+import {login, logout } from "../services/api/auth";
+import { ApiResponse } from "../services/api/common";
 
 type AuthContext = {
     currentUser?: User | null;
-    handleLogin: (email: string, password: string) => Promise<AuthResponse>
-    handleLogout: () => Promise<AuthResponse>
+    handleLogin: (email: string, password: string) => Promise<ApiResponse>
+    handleLogout: () => Promise<ApiResponse>
 }
 type AuthProviderProps = PropsWithChildren
 

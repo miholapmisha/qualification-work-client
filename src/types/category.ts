@@ -2,13 +2,17 @@ export enum CategoryType {
     FACULTY = "faculty",
     SPECIALTY = "specialty",
     DEGREE = "degree",
-    YEAR = "course",
+    YEAR = "year",
     GROUP = "group"
 }
 
 export type Category = {
-    id: string
+    _id: string
     name: string,
-    type: CategoryType,
+    categoryType: CategoryType,
     path: string
+}
+
+export type TreeCategory = Category & {
+    children: TreeCategory[]
 }

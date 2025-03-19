@@ -17,7 +17,7 @@ const getSidebarOptions = (userRoles: Role[]): SidebarOptionType[] => {
             title: config.title,
             icon: config.icon,
             onOptionClick: () => navigate(config.path),
-            selected: pathname === config.path
+            selected: pathname.includes(config.path)
         }))
     });
 }

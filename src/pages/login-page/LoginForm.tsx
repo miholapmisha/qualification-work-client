@@ -41,7 +41,7 @@ const LoginForm = () => {
     )
 
     useEffect(() => {
-        if (loginResult.error) {
+        if (!loginResult.success && loginResult.error) {
             setShowAlert(true)
         } else {
             setShowAlert(false)

@@ -4,13 +4,14 @@ import { User } from "../../types/user"
 import { Navigate, useLocation } from "react-router-dom"
 import PageLoader from "../../components/PageLoader"
 import { routesByPriority } from "../../routes/route-config"
+import { useCallback } from "react"
 
 const LoginPage = () => {
 
     const { currentUser } = useAuth()
     const { search } = useLocation()
 
-    const getRedirectRoute = (loggedInUser: User) => {
+    const getRedirectRoute = useCallback((loggedInUser: User) => {
         const { roles: userRoles } = loggedInUser
 
         for (const { routes, role } of routesByPriority) {
@@ -34,7 +35,7 @@ const LoginPage = () => {
         }
 
         return '/'
-    }
+    }, [routesByPriority])
 
     if (currentUser === undefined) {
         return <PageLoader />

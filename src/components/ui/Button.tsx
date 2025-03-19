@@ -7,7 +7,7 @@ type ButtonProps = {
 const Button = ({ children, classes, ...props }: ButtonProps) => {
 
     return (
-        <button className={`${classes ? classes : ''} cursor-pointer hover:bg-primary-800 bg-black text-white rounded px-4 py-2`} {...props}>{children}</button>
+        <button className={`${classes ? classes : ''} disabled:bg-primary-400 cursor-pointer hover:bg-primary-800 bg-black text-white rounded px-4 py-2`} {...props}>{children}</button>
     )
 }
 
