@@ -19,10 +19,13 @@ const Accordion = ({ defaultExpanded, headerComponent: HeaderComponent, children
             }
             }>
                 {isExpanded ? <MinusIcon width={'16px'} height={'16px'} /> : <PlusIcon width={'16px'} height={'16px'} />}
-                {/* <ChevronIcon width={'12px'} height={'12px'} className={`${isExpanded ? 'rotate-0' : 'rotate-180'} transition-all duration-200 ease-in-out`} /> */}
                 {HeaderComponent}
             </div>
-            {children && isExpanded && children}
+            <div className={`transition-all duration-300 ease-in-out grid overflow-hidden ${isExpanded ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+                <div className="overflow-hidden">
+                    {children && children}
+                </div>
+            </div>
         </div>
     )
 }

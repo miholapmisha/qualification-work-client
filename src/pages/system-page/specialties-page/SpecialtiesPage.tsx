@@ -72,7 +72,7 @@ const SpecialtiesPage = () => {
     return (
         <>
             {errorMessage && <AlertBlock key={errorMessage} absolute={true} alertMessage={errorMessage} onCloseAlert={() => { }} />}
-            {facultyData && <AddSpecialtyModal onSave={async (data) => {
+            {facultyData && openAddSpecialtyModal && <AddSpecialtyModal onSave={async (data) => {
                 setOpenAddSpecialtyModal(false)
                 handleSaveSpecialty(data)
 

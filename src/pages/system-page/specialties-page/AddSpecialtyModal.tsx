@@ -1,4 +1,4 @@
-import Modal from "../../../components/Modal"
+import Modal from "../../../components/ui/Modal"
 import Input from "../../../components/ui/Input"
 import Button from "../../../components/ui/Button"
 import { useState } from "react"
@@ -6,7 +6,7 @@ import { useState } from "react"
 const availableDegrees: Degree[] = [
     { id: 1, name: "Bachelor", courses: 4 },
     { id: 2, name: "Master", courses: 2 },
-    { id: 3, name: "Ph.D", courses: 2 }
+    { id: 3, name: "Ph.D", courses: 4 }
 ]
 
 export type Degree = {
