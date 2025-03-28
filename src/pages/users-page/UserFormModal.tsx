@@ -2,28 +2,24 @@ import Modal from "../../components/ui/Modal"
 import Button from "../../components/ui/Button"
 import UsersIcon from "../../components/ui/icons/UsersIcon"
 import Input from "../../components/ui/Input"
-import { Role, User } from "../../types/user"
+import { Role, User, UserFormPayload } from "../../types/user"
 import Switch from "../../components/ui/Switch"
 import InfoIcon from "../../components/ui/icons/InfoIcon"
 import { useForm } from "react-hook-form"
+import { isStrongPassword } from "../../util/user"
 
 type UserFormProps = {
     isOpen: boolean,
     onClose: () => void,
-    onSave: (user: User) => void,
+    onSave: (user: UserFormPayload) => void,
     user?: User | null
-}
-
-type UserFormInputs = {
-    email: string,
-    name: string,
-    roles: Role[]
 }
 
 const UserFormModal = ({ user, isOpen, onClose, onSave }: UserFormProps) => {
 
-    const { register, handleSubmit, watch, formState: { errors }, setValue } = useForm<UserFormInputs>({
+    const { register, handleSubmit, watch, formState: { errors }, setValue } = useForm<UserFormPayload>({
         defaultValues: {
+            ...user,
             roles: user?.roles || [Role.TEACHER]
         }
     });
@@ -35,6 +31,9 @@ const UserFormModal = ({ user, isOpen, onClose, onSave }: UserFormProps) => {
             ? [...userRoles, roleToUpdate]
             : userRoles.filter((role) => role !== roleToUpdate);
 
+        if (updatedRoles.length <= 0) {
+            return userRoles
+        }
 
         if (roleToUpdate === Role.ADMIN || roleToUpdate === Role.TEACHER) {
             return [...updatedRoles.filter(role => role !== Role.STUDENT)]
@@ -43,14 +42,33 @@ const UserFormModal = ({ user, isOpen, onClose, onSave }: UserFormProps) => {
         return updatedRoles.filter(role => role !== Role.TEACHER && role !== Role.ADMIN)
     }
 
-    const handleFormSubmission = (data: UserFormInputs) => {
-        onSave(data as User)
+    const handleFormSubmission = (data: UserFormPayload) => {
+        if (user && !data.password) {
+            delete data.password
+        }
+        onSave(data)
+    }
+
+    const validatePassword = (value: string | undefined) => {
+        if (user) {
+            if (value && !isStrongPassword(value)) {
+                return "Password must include at least one uppercase letter, one lowercase letter, one number, and one special character";
+            }
+        } else {
+            if (!value) {
+                return "Password is required";
+            }
+            if (!isStrongPassword(value)) {
+                return "Password must include at least one uppercase letter, one lowercase letter, one number, and one special character";
+            }
+        }
+        return true;
     }
 
     return (
-        <Modal key={user?.id} isOpen={isOpen} onClose={onClose}>
+        <Modal key={user?._id} isOpen={isOpen} onClose={onClose}>
             <form onSubmit={handleSubmit(handleFormSubmission)}>
-                <div className="w-full max-w-[568px] h-full max-h-[456px] p-4 space-y-10">
+                <div className="w-full max-w-[568px] h-full p-4 space-y-10">
                     <div className="space-y-6">
                         <div className="flex space-x-4 items-baseline">
                             <UsersIcon />
@@ -60,6 +78,19 @@ const UserFormModal = ({ user, isOpen, onClose, onSave }: UserFormProps) => {
 
                             <Input defaultValue={user?.name || ''} {...register('name', { required: "Name is required" })} error={errors?.name} name="name" id="name" label="Name" />
                             <Input defaultValue={user?.email || ''} {...register('email', { required: "Email is required" })} error={errors?.email} name="email" id="email" label="Email" />
+                        </div>
+                        <div className={`${user ? 'h-[92px]' : 'h-[62px]'} space-y-2`}>
+                            {user && <h2 className="font-semibold text-gray-900">Set new password for user (optional)</h2>}
+                            <Input
+                                {...register('password', {
+                                    validate: (value) => validatePassword(value)
+                                })}
+                                error={errors?.password}
+                                type="password"
+                                name="password"
+                                id="password"
+                                label="Password"
+                            />
                         </div>
                         <div className="space-y-2">
                             <h2 className="font-semibold text-gray-900">Select role</h2>
@@ -84,7 +115,7 @@ const UserFormModal = ({ user, isOpen, onClose, onSave }: UserFormProps) => {
                                 </div>
                             ))}
                         </div>
-
+                        {errors.roles && <p className="text-red-600">{errors.roles.message}</p>}
                     </div>
                     <div className="flex justify-end space-x-4">
                         <Button className="cursor-pointer hover:bg-primary-300 bg-primary-200 px-2 rounded" onClick={() => onClose()}>Close</Button>

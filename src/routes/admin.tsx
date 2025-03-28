@@ -5,6 +5,7 @@ import SpecialtiesPage from "../pages/system-page/specialties-page/SpecialtiesPa
 import SpecialtyProvider from "../pages/system-page/specialties-page/SpecialtyProvider";
 import SystemPage from "../pages/system-page/SystemPage";
 import UsersPage from "../pages/users-page/UsersPage";
+import UsersProvider from "../pages/users-page/UsersProvider";
 import { Role } from "../types/user";
 
 export const adminRoutes = [
@@ -35,7 +36,9 @@ export const adminRoutes = [
             {
                 path: '/users',
                 element:
-                    <UsersPage />
+                    <UsersProvider>
+                        <UsersPage />
+                    </UsersProvider>
             },
         ]
     }

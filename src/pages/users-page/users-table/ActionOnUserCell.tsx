@@ -4,9 +4,10 @@ import TrashIcon from "../../../components/ui/icons/TrashIcon"
 
 type ActionOnUserCellProps = {
     onEditClick: () => void
+    onDeleteClick: () => void
 }
 
-const ActionOnUserCell = ({ onEditClick }: ActionOnUserCellProps) => {
+const ActionOnUserCell = ({ onEditClick, onDeleteClick }: ActionOnUserCellProps) => {
 
     return (
         <div className="flex space-x-2 text-white text-xs">
@@ -14,7 +15,7 @@ const ActionOnUserCell = ({ onEditClick }: ActionOnUserCellProps) => {
                 <PenIcon width={'10px'} height={'10px'} fill={"white"} />
                 <span>Edit</span>
             </Button>
-            <Button classes="flex items-center space-x-2">
+            <Button onClick={onDeleteClick} classes="flex items-center space-x-2">
                 <TrashIcon width={'10px'} height={'10px'} fill={"white"} />
                 <span>Delete</span>
             </Button>

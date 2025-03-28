@@ -5,7 +5,7 @@ import AddSpecialtyModal, { SpecialtyCreationData } from "./AddSpecialtyModal"
 import CategoryNode from "./CategoryNode"
 import { Category, CategoryType } from "../../../types/category"
 import { defaultPathSeparator } from "../common"
-import { buildCategoryTree } from "../../../services/category"
+import { buildCategoryTree } from "../../../util/category"
 import AlertBlock from "../../../components/ui/AlertBlock"
 import { useSpecialties } from "./SpecialtyProvider"
 

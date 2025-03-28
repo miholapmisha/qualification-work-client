@@ -2,10 +2,13 @@ import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "
 import { User } from "../../../types/user"
 import RoleCell from "./RoleCell"
 import ActionOnUserCell from "./ActionOnUserCell"
+import Loader from "../../../components/ui/Loader"
 
 type UserTableProps = {
     users: User[],
+    proceedingUsersIds?: string[],
     onEditUser: (user: User) => void
+    onDeleteUser: (_id: string) => void
 }
 
 type MetaType = {
@@ -13,7 +16,7 @@ type MetaType = {
 }
 
 const columnHelper = createColumnHelper<User>()
-const getColumns = (onEditUser: (user: User) => void) => {
+const getColumns = (onEditUser: (user: User) => void, onDeleteUser: (_id: string) => void) => {
     return [
         columnHelper.accessor('name', {
             header: 'Name',
@@ -35,43 +38,17 @@ const getColumns = (onEditUser: (user: User) => void) => {
             header: 'Actions',
             cell: (context) => {
                 const user = context.row.original
-                return <ActionOnUserCell onEditClick={() => onEditUser(user)} />
+                return <ActionOnUserCell onDeleteClick={() => { onDeleteUser(user._id) }} onEditClick={() => onEditUser(user)} />
             },
             meta: { width: 'w-1/6' } as MetaType
         })
     ]
 }
-// const columns = [
-//     columnHelper.accessor('name', {
-//         header: 'Name',
-//         cell: info => info.getValue(),
-//         meta: { width: 'w-1/5' } as MetaType
-//     }),
-//     columnHelper.accessor('roles', {
-//         header: 'Roles',
-//         cell: info => <RoleCell roles={info.getValue()} />,
-//         meta: { width: 'w-1/4' } as MetaType
-//     }),
-//     columnHelper.accessor('email', {
-//         header: 'Email',
-//         cell: info => info.getValue(),
-//         meta: { width: 'w-2/5' } as MetaType
-//     }),
-//     columnHelper.display({
-//         id: 'actions',
-//         header: 'Actions',
-//         cell: (context) => {
-//             const user = context.row.original
-//             return <ActionOnUserCell user={user} />
-//         },
-//         meta: { width: 'w-1/6' } as MetaType
-//     })
-// ]
 
-const UsersTable = ({ users, onEditUser }: UserTableProps) => {
+const UsersTable = ({ users, onEditUser, onDeleteUser, proceedingUsersIds }: UserTableProps) => {
     const table = useReactTable({
         data: users,
-        columns: getColumns(onEditUser),
+        columns: getColumns(onEditUser, onDeleteUser),
         getCoreRowModel: getCoreRowModel()
     })
 
@@ -99,23 +76,30 @@ const UsersTable = ({ users, onEditUser }: UserTableProps) => {
                     ))}
                 </thead>
                 <tbody className="divide-y divide-primary-100">
-                    {table.getRowModel().rows.map(row => (
+                    {table.getRowModel().rows.map((row) => (
                         <tr
                             key={row.id}
-                            className="hover:bg-primary-50 transition-colors duration-150 ease-in-out"
+                            className={`hover:bg-primary-100 transition-colors duration-150 ease-in-out min-h-[65px]`}
                         >
-                            {row.getVisibleCells().map(cell => (
-                                <td
-                                    key={cell.id}
-                                    className={`p-4 font-main text-primary-800 ${(cell.column.columnDef.meta as MetaType)?.width || ''
-                                        }`}
-                                >
-                                    {flexRender(
-                                        cell.column.columnDef.cell,
-                                        cell.getContext()
-                                    )}
+                            {proceedingUsersIds?.includes(row.original._id) ? (
+                                <td colSpan={table.getAllColumns().length} className="p-4 text-center">
+                                    <Loader classes="mx-auto" size={{ width: '32px', height: '32px' }} />
                                 </td>
-                            ))}
+                            ) : (
+                                row.getVisibleCells().map(cell => (
+                                    <td
+                                        key={cell.id}
+                                        className={`p-4 font-main text-primary-800 ${(cell.column.columnDef.meta as MetaType)?.width || ''
+                                            }`}
+                                    >
+                                        {flexRender(
+                                            cell.column.columnDef.cell,
+                                            cell.getContext()
+                                        )}
+                                    </td>
+                                ))
+                            )}
+
                         </tr>
                     ))}
                 </tbody>

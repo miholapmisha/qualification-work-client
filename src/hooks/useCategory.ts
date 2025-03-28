@@ -4,7 +4,7 @@ import { ApiResponse } from "../services/api/common"
 import { Category } from "../types/category"
 import { useState } from "react"
 import { defaultPathSeparator } from "../pages/system-page/common"
-import { getParentId, isDescendant } from "../services/category"
+import { getParentId, isDescendant } from "../util/category"
 
 type useCategoryProps = {
     queryKey: any[],

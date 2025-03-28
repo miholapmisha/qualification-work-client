@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form"
 import { startTransition, useActionState, useEffect, useRef, useState } from "react"
 import { useAuth } from "../../components/AuthProvider"
 import AlertBlock from "../../components/ui/AlertBlock"
+import { isStrongPassword } from "../../util/user"
 
 type FormState = {
     success: boolean,
@@ -66,13 +67,21 @@ const LoginForm = () => {
                         <div className="space-y-6">
 
                             <Input {...register('email', { required: "Email is required" })} error={errors?.email} name="email" id="email" label="Email" />
-                            <Input {
-                                ...register('password', {
+                            <Input
+                                {...register('password', {
                                     required: "Password is required",
-                                    minLength: { value: 8, message: "Should contain at least 8 characters" }
+                                    validate: {
+                                        strongPassword: (value) =>
+                                            isStrongPassword(value) ||
+                                            "Password must include at least one uppercase letter, one lowercase letter, one number, and one special character"
+                                    }
                                 })}
                                 error={errors?.password}
-                                type="password" name="password" id="password" label="Password" />
+                                type="password"
+                                name="password"
+                                id="password"
+                                label="Password"
+                            />
 
                         </div>
                         <Button type="submit" classes="w-full">

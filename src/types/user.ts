@@ -5,8 +5,12 @@ export enum Role {
 }
 
 export type User = {
-    id: number;
+    _id: string;
     email: string;
     name: string;
     roles: Role[];
 };
+
+export type UserFormPayload = User & {
+    password?: string
+}
