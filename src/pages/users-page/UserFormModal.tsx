@@ -42,10 +42,22 @@ const UserFormModal = ({ user, isOpen, onClose, onSave }: UserFormProps) => {
         return updatedRoles.filter(role => role !== Role.TEACHER && role !== Role.ADMIN)
     }
 
+
+    // TODO: update to more flexible function logic
     const handleFormSubmission = (data: UserFormPayload) => {
         if (user && !data.password) {
             delete data.password
         }
+        if (user && user.email === data.email) {
+            delete data.email
+        }
+        if (user && user.name === data.name) {
+            delete data.name
+        }
+        if (user && JSON.stringify(user.roles) === JSON.stringify(data.roles)) {
+            delete data.roles
+        }
+        
         onSave(data)
     }
 
@@ -106,9 +118,9 @@ const UserFormModal = ({ user, isOpen, onClose, onSave }: UserFormProps) => {
                                         {role}
                                     </span>
                                     <Switch
-                                        switchOn={roles.includes(role)}
+                                        switchOn={roles && roles.includes(role) || false}
                                         onChangeSwitchState={(value) => {
-                                            const updatedRoles = handleRoleSwitch(roles, role, value)
+                                            const updatedRoles = handleRoleSwitch(roles || [], role, value)
                                             setValue("roles", updatedRoles);
                                         }}
                                     />

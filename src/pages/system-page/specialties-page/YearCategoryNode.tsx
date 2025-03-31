@@ -33,7 +33,7 @@ const YearCategoryNode = ({ yearCategory }: YearCategoryNodeProps) => {
     const showLoader = parentIdsCreatingCategories.includes(yearCategory._id)
 
     return (
-        <div className="animate-flip-down animate-duration-[600ms] py-4 pl-10 pr-4 space-y-5 border-primary-300 rounded-l-2xl border-y-1 border-l-1 border-dashed flex flex-col bg-gray-50 shadow-inner">
+        <div className="animate-flip-down animate-duration-[600ms] py-4 pl-10 pr-4 space-y-5 border-primary-300 rounded-l-2xl border-y-1 border-l-1 border-dashed flex flex-col bg-gray-50">
             {groups.length > 0 && (
                 <div className="space-y-4">
                     {groups.map((group) => (<GroupItem key={group._id} group={group} />))}

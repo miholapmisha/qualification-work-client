@@ -11,6 +11,10 @@ export type User = {
     roles: Role[];
 };
 
-export type UserFormPayload = User & {
+export type UserFormPayload = {
+    _id: string;
+    email?: string;
+    name?: string;
+    roles?: Role[];
     password?: string
 }

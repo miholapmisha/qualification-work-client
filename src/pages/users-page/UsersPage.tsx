@@ -31,15 +31,13 @@ const UsersPage = () => {
         createUser,
         updateUser,
         deleteUser,
-        message,
-        error: usersError,
+        error,
         proceedingUsersIds,
-        creatingUser
+        isUserCreating
     } = useUsers({
         queryKey: ['users', page, defaultItemsPerPage],
         fetchParams: { page, take: defaultItemsPerPage }
     })
-    const errorMessage = usersError && message
 
     useEffect(() => {
         if (paginationData?.pageCount) {
@@ -49,7 +47,9 @@ const UsersPage = () => {
 
     const handleUserFormSave = (userData: UserFormPayload) => {
         if (editableUser) {
-            updateUser({ _id: userData._id, userData })
+            if (Object.keys(userData).length > 1) {
+                updateUser({ _id: userData._id, userData })
+            }
         } else if (editableUser === undefined) {
             createUser(userData)
         }
@@ -59,7 +59,7 @@ const UsersPage = () => {
 
     return (
         <>
-            {errorMessage && <AlertBlock key={errorMessage} absolute={true} alertMessage={errorMessage} onCloseAlert={() => { }} />}
+            {error && <AlertBlock key={error.id} absolute={true} alertMessage={error.message} onCloseAlert={() => { }} />}
             <div className="flex-auto rounded-2xl bg-primary-50 overflow-y-auto p-16 space-y-10 flex flex-col items-center">
                 {fetchingUsers && !users && <Loader classes="m-auto" size={{ width: '86px', height: '86px' }} />}
                 {users && users.length > 0 && totalPages > 0 &&
@@ -69,9 +69,9 @@ const UsersPage = () => {
                                 proceedingUsersIds={proceedingUsersIds}
                                 onEditUser={(user: User) => setEditableUser(user)} users={users} />
                         </div>
-                        <Button disabled={creatingUser} className={`disabled:bg-primary-100 disabled:text-primary-400 mr-auto hover:bg-primary-300 text-sm text-primary-600 rounded-2xl cursor-pointer px-4 py-2 bg-primary-200`}
+                        <Button disabled={isUserCreating} className={`disabled:bg-primary-100 disabled:text-primary-400 mr-auto hover:bg-primary-300 text-sm text-primary-600 rounded-2xl cursor-pointer px-4 py-2 bg-primary-200`}
                             onClick={() => { setEditableUser(undefined) }}>
-                            {creatingUser ?
+                            {isUserCreating ?
                                 <div className="flex items-center space-x-2">
                                     <Loader color={"#9ca3af"} size={{ width: '16px', height: '16px' }} />
                                     <span>Creating...</span>
