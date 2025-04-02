@@ -11,10 +11,11 @@ export type User = {
     roles: Role[];
 };
 
-export type UserFormPayload = {
+export type UserPayload = {
     _id: string;
     email?: string;
     name?: string;
     roles?: Role[];
-    password?: string
+    password?: string,
+    groupId?: string
 }

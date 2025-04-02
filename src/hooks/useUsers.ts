@@ -1,18 +1,20 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createUser, deleteUser, getUsers, updateUser } from "../services/api/user";
 import { useState } from "react";
-import { User, UserFormPayload } from "../types/user";
+import { User, UserPayload } from "../types/user";
 import { ApiResponse } from "../services/api/common";
 import { NetworkError } from "../types/error";
+import { FilterObject } from "../types/filtering";
 
 type useUsersProps = {
     queryKey: any[];
-    fetchParams: any;
+    fetchParams: { pagination?: { take: number, page: number }, searchParams?: FilterObject[] };
 };
 
 export const useUsers = ({ queryKey, fetchParams }: useUsersProps) => {
     const queryClient = useQueryClient();
     const [proceedingUsersIds, setProceedingUsersIds] = useState<string[]>([]);
+    //TODO: update logic
     const [lastErrorMessage, setLastErrorMessage] = useState<NetworkError | undefined>(undefined);
 
     const { data: usersResponse, isFetching: fetchingUsers, isPlaceholderData: isPlaceholderUsers } = useQuery({
@@ -28,7 +30,7 @@ export const useUsers = ({ queryKey, fetchParams }: useUsersProps) => {
     });
 
     const { mutateAsync: createUserMutation, isPending: isUserCreating } = useMutation({
-        mutationFn: (userData: UserFormPayload) => createUser(userData),
+        mutationFn: (userData: UserPayload) => createUser(userData),
         onSettled: (response) => {
             if (response?.error) {
                 setLastErrorMessage({ message: response.data.message, id: crypto.randomUUID() });
@@ -86,7 +88,7 @@ export const useUsers = ({ queryKey, fetchParams }: useUsersProps) => {
     });
 
     const { mutateAsync: updateUserMutation } = useMutation({
-        mutationFn: ({ _id, userData }: { _id: string; userData: UserFormPayload }) => {
+        mutationFn: ({ _id, userData }: { _id: string; userData: UserPayload }) => {
             setProceedingUsersIds((prevIds) => [...prevIds, _id]);
             return updateUser({ _id, data: userData });
         },
@@ -124,7 +126,9 @@ export const useUsers = ({ queryKey, fetchParams }: useUsersProps) => {
 
     return {
         fetchingUsers,
-        users: usersResponse?.data?.payload?.data,
+        users: Array.isArray(usersResponse?.data?.payload) 
+            ? usersResponse?.data?.payload 
+            : usersResponse?.data?.payload?.data,
         error: lastErrorMessage,
         message: usersResponse?.data?.message,
         proceedingUsersIds,
@@ -133,6 +137,8 @@ export const useUsers = ({ queryKey, fetchParams }: useUsersProps) => {
         deleteUser: deleteUserMutation,
         updateUser: updateUserMutation,
         isPlaceholderUsers,
-        paginationData: usersResponse?.data?.payload?.metaData,
+        paginationData: !Array.isArray(usersResponse?.data?.payload) 
+            ? usersResponse?.data?.payload?.metaData 
+            : undefined,
     };
 };

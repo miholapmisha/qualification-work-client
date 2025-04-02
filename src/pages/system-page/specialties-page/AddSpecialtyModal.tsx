@@ -84,10 +84,12 @@ const AddSpecialtyModal = ({ isOpen, onClose, onSave }: AddSpecialtyModal) => {
                             <div key={index} className="flex-1 space-y-4">
                                 <Button onClick={() => {
                                     selectDegree(degree)
-                                }} className={`${isDegreeSelected(degree.id) ? 'bg-green-100 text-green-800 border-green-300' : 'text-primary-800 hover:bg-primary-100 bg-primary-100'} transition-colors duration-300 ease-in-out w-full min-h-15 cursor-pointer  border-b-1 border-black`}>+ {degree.name}</Button>
+                                }} className={`${isDegreeSelected(degree.id) ? 'bg-green-100 text-green-800 border-green-300' : 'text-primary-800 hover:bg-primary-100 bg-primary-100'} transition-colors duration-300 ease-in-out w-full min-h-15 cursor-pointer  border-b-1 border-black`}>
+                                    + {degree.name}
+                                </Button>
                                 {isDegreeSelected(degree.id) && <div className="">
                                     <div className="max-h-15">
-                                        <Input label="Year" onChange={(event) => { handleYearChange(degree.id, +event.target.value) }} defaultValue={degree.courses} onKeyDown={(event) => event.preventDefault()} min={1} max={degree.courses} type="number" />
+                                        <Input label="Courses" onChange={(event) => { handleYearChange(degree.id, +event.target.value) }} defaultValue={degree.courses} onKeyDown={(event) => event.preventDefault()} min={1} max={degree.courses} type="number" />
                                     </div>
                                 </div>}
                             </div>

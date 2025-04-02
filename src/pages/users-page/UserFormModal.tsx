@@ -2,7 +2,7 @@ import Modal from "../../components/ui/Modal"
 import Button from "../../components/ui/Button"
 import UsersIcon from "../../components/ui/icons/UsersIcon"
 import Input from "../../components/ui/Input"
-import { Role, User, UserFormPayload } from "../../types/user"
+import { Role, User, UserPayload } from "../../types/user"
 import Switch from "../../components/ui/Switch"
 import InfoIcon from "../../components/ui/icons/InfoIcon"
 import { useForm } from "react-hook-form"
@@ -11,13 +11,13 @@ import { isStrongPassword } from "../../util/user"
 type UserFormProps = {
     isOpen: boolean,
     onClose: () => void,
-    onSave: (user: UserFormPayload) => void,
+    onSave: (user: UserPayload) => void,
     user?: User | null
 }
 
 const UserFormModal = ({ user, isOpen, onClose, onSave }: UserFormProps) => {
 
-    const { register, handleSubmit, watch, formState: { errors }, setValue } = useForm<UserFormPayload>({
+    const { register, handleSubmit, watch, formState: { errors }, setValue } = useForm<UserPayload>({
         defaultValues: {
             ...user,
             roles: user?.roles || [Role.TEACHER]
@@ -44,7 +44,7 @@ const UserFormModal = ({ user, isOpen, onClose, onSave }: UserFormProps) => {
 
 
     // TODO: update to more flexible function logic
-    const handleFormSubmission = (data: UserFormPayload) => {
+    const handleFormSubmission = (data: UserPayload) => {
         if (user && !data.password) {
             delete data.password
         }

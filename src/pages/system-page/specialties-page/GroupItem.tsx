@@ -7,10 +7,11 @@ import CategoryNameInput from "./CategoryNameInput";
 import { useSpecialties } from "./SpecialtyProvider";
 
 type GroupItemProps = {
-    group: TreeCategory
+    group: TreeCategory,
+    onGroupClick: (group: TreeCategory) => void
 }
 
-const GroupItem = ({ group }: GroupItemProps) => {
+const GroupItem = ({ group, onGroupClick }: GroupItemProps) => {
 
     const { deleteCategory: deleteGroup, updateCategory: updateGroup, proceedingCategoriesIds } = useSpecialties()
     const { editInputRef: editNameInputRef, edit, setEdit } = useEditable()
@@ -31,7 +32,7 @@ const GroupItem = ({ group }: GroupItemProps) => {
                     {edit ?
                         <CategoryNameInput editNameInputRef={editNameInputRef} category={group} onSave={(name) => onUpdateGroupName(name)} />
                         :
-                        <span className="font-light text-gray-800 hover:text-primary-600 transition-colors border-b border-gray-300 hover:border-primary-400 cursor-pointer">
+                        <span onClick={() => onGroupClick(group)} className="font-light text-gray-800 hover:text-primary-600 transition-colors border-b border-gray-300 hover:border-primary-400 cursor-pointer">
                             {group.name}
                         </span>}
                     <div className="flex items-center">

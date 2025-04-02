@@ -6,7 +6,7 @@ import { useLocation } from "react-router-dom";
 import { useUsers } from "../../hooks/useUsers";
 import UserFormModal from "./UserFormModal";
 import Button from "../../components/ui/Button";
-import { User, UserFormPayload } from "../../types/user";
+import { User, UserPayload } from "../../types/user";
 import AlertBlock from "../../components/ui/AlertBlock";
 
 const defaultPage = 1;
@@ -36,7 +36,11 @@ const UsersPage = () => {
         isUserCreating
     } = useUsers({
         queryKey: ['users', page, defaultItemsPerPage],
-        fetchParams: { page, take: defaultItemsPerPage }
+        fetchParams: {
+            pagination: {
+                page, take: defaultItemsPerPage
+            }
+        }
     })
 
     useEffect(() => {
@@ -45,7 +49,7 @@ const UsersPage = () => {
         }
     }, [paginationData])
 
-    const handleUserFormSave = (userData: UserFormPayload) => {
+    const handleUserFormSave = (userData: UserPayload) => {
         if (editableUser) {
             if (Object.keys(userData).length > 1) {
                 updateUser({ _id: userData._id, userData })

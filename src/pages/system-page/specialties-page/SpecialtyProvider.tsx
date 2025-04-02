@@ -3,11 +3,12 @@ import { Category } from "../../../types/category"
 import { useCategory } from "../../../hooks/useCategory"
 import { ApiResponse } from "../../../services/api/common"
 import { useSearchParams } from "react-router-dom"
+import { NetworkError } from "../../../types/error"
 
 type SpecialtyContextType = {
     fetchingCategories: boolean,
     categories: Category[] | undefined,
-    error: boolean | undefined,
+    error: NetworkError | undefined,
     message: string | undefined,
     proceedingCategoriesIds: string[],
     parentIdsCreatingCategories: string[],

@@ -1,6 +1,6 @@
 import { createContext, PropsWithChildren, useContext } from "react"
 import { useUsers } from "../../hooks/useUsers"
-import { User, UserFormPayload } from "../../types/user"
+import { User, UserPayload } from "../../types/user"
 import { ApiResponse } from "../../services/api/common"
 import { useSearchParams } from "react-router-dom"
 
@@ -10,9 +10,9 @@ type UsersContextType = {
     error: boolean | undefined,
     message: string | undefined,
     proceedingUsers: string[],
-    createUser: (userData: UserFormPayload) => Promise<ApiResponse<User | undefined>>,
+    createUser: (userData: UserPayload) => Promise<ApiResponse<User | undefined>>,
     deleteUser: (userId: string) => Promise<ApiResponse<any>>,
-    updateUser: (user: { _id: string, userData: UserFormPayload }) => Promise<ApiResponse<any>>
+    updateUser: (user: { _id: string, userData: UserPayload }) => Promise<ApiResponse<any>>
 }
 
 type UsersProviderProps = PropsWithChildren
@@ -23,13 +23,13 @@ const UsersContext = createContext<UsersContextType>({
     error: undefined,
     message: undefined,
     proceedingUsers: [],
-    createUser: async (userData: UserFormPayload) => {
+    createUser: async (userData: UserPayload) => {
         return { data: { message: '', payload: undefined }, error: false } as ApiResponse<any>
     },
     deleteUser: async (userId: string): Promise<ApiResponse<any>> => {
         return { data: { message: '', payload: userId }, error: false } as ApiResponse<any>
     },
-    updateUser: async (user: { _id: string, userData: UserFormPayload }) => {
+    updateUser: async (user: { _id: string, userData: UserPayload }) => {
         return { data: { message: '', payload: user }, error: false } as ApiResponse<any>
     }
 })
