@@ -1,10 +1,9 @@
 import { useCallback, useState } from "react"
-import Button from "../../../components/ui/Button"
+import Button from "../../../components/common/Button"
 import { Category, CategoryType } from "../../../types/category"
-import AlertBlock from "../../../components/ui/AlertBlock"
 import FacultyCard from "./FacultyCard"
 import FacultyForm from "./FacultyForm"
-import Loader from "../../../components/ui/Loader"
+import Loader from "../../../components/common/Loader"
 import LoaderCard from "./LoaderFacultyCard"
 import { useCategory } from "../../../hooks/useCategory"
 
@@ -19,12 +18,8 @@ export const FacultiesPage = () => {
         deleteCategory: deleteFaculty,
         updateCategory: updateFaculty,
         createCategories: createFaculty,
-        error,
-        message,
         proceedingCategoriesIds: proceedingFacultiesIds
     } = useCategory({ fetchParams: { categoryType: CategoryType.FACULTY }, queryKey: ['faculties'] })
-
-    const errorMessage = error && message
     const showMessageNoFacultiesYet = faculties && faculties?.length <= 0 && !showAddFacultyForm && !fetchingFaculties
 
     const renderFaculties = useCallback((faculties: Category[]) => {
@@ -47,7 +42,6 @@ export const FacultiesPage = () => {
 
     return (
         <>
-            {errorMessage && <AlertBlock key={errorMessage} absolute={true} alertMessage={errorMessage} onCloseAlert={() => { }} />}
             <div className="flex-1 flex flex-col space-y-4">
                 <h1 className="text-2xl">Select faculty for detailed information</h1>
                 <div className="flex-1 flex flex-col items-center pt-10 pb-5 border-t-1 border-primary-400 w-full space-y-4">

@@ -1,14 +1,14 @@
-import Modal from "../../../../components/ui/Modal";
+import Modal from "../../../../components/common/Modal";
 import { useEffect, useMemo, useState } from "react";
 import CurrentMembersTab from "./CurrentMembersTab";
 import AddUsersTab from "./AddUsersTab";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { assignUsersToGroup, getUsers } from "../../../../services/api/user";
 import { Role, User } from "../../../../types/user";
 import { useDebounce } from "../../../../hooks/useDebounce";
 import { FilterOperator } from "../../../../types/filtering";
-import Button from "../../../../components/ui/Button";
-import Loader from "../../../../components/ui/Loader";
+import Button from "../../../../components/common/Button";
+import Loader from "../../../../components/common/Loader";
 
 type GroupModalProps = {
     groupId: string,
@@ -21,7 +21,6 @@ const GroupModal = ({ isOpen, onClose, groupId }: GroupModalProps) => {
     const [searchQuery, setSearchQuery] = useState("")
     const [activeTab, setActiveTab] = useState("members")
     const debouncedSearchQuery = useDebounce({ value: searchQuery, milliseconds: 1000 }) || ''
-    const queryClient = useQueryClient()
     const [groupMembers, setGroupMembers] = useState<User[]>([])
     const groupMembersIds = useMemo(() => groupMembers.map(member => member._id), [groupMembers]);
 
@@ -34,13 +33,20 @@ const GroupModal = ({ isOpen, onClose, groupId }: GroupModalProps) => {
                     value: [
                         { field: 'name', operator: FilterOperator.REGEX, value: debouncedSearchQuery },
                         { field: 'email', operator: FilterOperator.REGEX, value: debouncedSearchQuery },
+                        { field: 'groupId', operator: FilterOperator.EQ, value: groupId },
+                    ]
+                },
+                {
+                    operator: FilterOperator.OR,
+                    value: [
+                        { field: 'groupId', operator: FilterOperator.EXISTS, value: false },
+                        { field: 'groupId', operator: FilterOperator.EQ, value: "" },
+                        { field: 'groupId', operator: FilterOperator.EQ, value: groupId },
                     ]
                 },
                 { field: 'roles', operator: FilterOperator.IN, value: [Role.STUDENT] },
-                { field: 'groupId', operator: FilterOperator.EXISTS, value: false }
             ]
-        }),
-        enabled: debouncedSearchQuery.trim() !== ''
+        })
     });
 
     const { data: groupMembersResponse, isFetching: fetchingGroupMembers } = useQuery({
@@ -53,14 +59,18 @@ const GroupModal = ({ isOpen, onClose, groupId }: GroupModalProps) => {
     })
 
     useEffect(() => {
-        setGroupMembers((groupMembersResponse?.data.payload as User[]) || [])
+        if (!groupMembersResponse?.error) {
+            setGroupMembers((groupMembersResponse?.data.payload as User[]) || [])
+        }
     }, [groupMembersResponse])
 
     const { mutateAsync: assignUsersToGroupMutation, isPending: assigningUsers } = useMutation({
-        mutationFn: ({ groupId, userIds }: { groupId: string; userIds: string[] }) => assignUsersToGroup({ groupId, userIds }),
-        onSettled: () => {
-            queryClient.invalidateQueries({ queryKey: ['groupMembers', groupId] })
-        },
+        mutationFn: ({ groupId, usersIds }: { groupId: string; usersIds: string[] }) => assignUsersToGroup({ groupId, usersIds }),
+        onSettled: (response, _) => {
+            if (response && response.error && response?.data.payload) {
+                setGroupMembers((groupMembersResponse?.data.payload as User[]) || [])
+            }
+        }
     })
 
     const searchUsers = useMemo(() => {
@@ -78,12 +88,11 @@ const GroupModal = ({ isOpen, onClose, groupId }: GroupModalProps) => {
         setGroupMembers([...groupMembers, user]);
     };
 
-    const removeUserFromGroup = (userId: any) => {
-        // const removedUser = groupMembers.find((user) => user.id === userId);
-        // if (removedUser) {
-        //     setGroupMembers(groupMembers.filter((user) => user.id !== userId));
-        //     setSearchResults([...searchResults, removedUser]);
-        // }
+    const removeUserFromGroup = (userId: string) => {
+        const removedUser = groupMembers.find((user) => user._id === userId);
+        if (removedUser) {
+            setGroupMembers(groupMembers.filter((user) => user._id !== userId));
+        }
     };
 
     return (
@@ -147,11 +156,14 @@ const GroupModal = ({ isOpen, onClose, groupId }: GroupModalProps) => {
                     <div className="mt-6 flex justify-end gap-3">
                         <button
                             onClick={onClose}
-                            className="px-4 py-2 border border-primary-300 rounded-md text-primary-700 hover:bg-primary-50"
+                            className="cursor-pointer px-4 py-2 border border-primary-300 rounded-md text-primary-700 hover:bg-primary-50"
                         >
-                            Cancel
+                            {assigningUsers ? 'Close' : 'Cancel'}
                         </button>
-                        <Button onClick={() => assignUsersToGroupMutation({ groupId, userIds: groupMembersIds })}>
+                        <Button onClick={() => {
+                            assignUsersToGroupMutation({ groupId, usersIds: groupMembersIds })
+                            setActiveTab("members")
+                        }}>
                             Save Changes
                         </Button>
                     </div>

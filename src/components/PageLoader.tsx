@@ -1,4 +1,4 @@
-import Loader from "./ui/Loader"
+import Loader from "./common/Loader"
 
 const PageLoader = () => {
     return (

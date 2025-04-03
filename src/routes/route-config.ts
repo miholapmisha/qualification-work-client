@@ -1,6 +1,6 @@
-import SurveyIcon from "../components/ui/icons/SurveyIcon";
-import UniversityIcon from "../components/ui/icons/UniversityIcon";
-import UsersIcon from "../components/ui/icons/UsersIcon";
+import SurveyIcon from "../components/common/icons/SurveyIcon";
+import UniversityIcon from "../components/common/icons/UniversityIcon";
+import UsersIcon from "../components/common/icons/UsersIcon";
 import { Role } from "../types/user";
 import { adminRoutes } from "./admin";
 import { teacherRoutes } from "./teacher";

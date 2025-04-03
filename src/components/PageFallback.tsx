@@ -1,4 +1,4 @@
-import CloseIcon from "./ui/icons/CloseIcon"
+import CloseIcon from "./common/icons/CloseIcon"
 
 type PageFallbackProps = {
     code?: string,

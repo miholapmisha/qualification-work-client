@@ -64,10 +64,10 @@ export const updateUser = async ({ _id, data }: { _id: string, data: UserPayload
     }
 }
 
-export const assignUsersToGroup = async ({ userIds, groupId }: { userIds: string[], groupId: string }) => {
+export const assignUsersToGroup = async ({ usersIds, groupId }: { usersIds: string[], groupId: string }) => {
     try {
         await new Promise((resolve) => { setTimeout(resolve, 2000) });
-        const response = await api.put(`/user/assign`, { userIds, groupId });
+        const response = await api.put(`/user/assign`, { usersIds, groupId });
         return handleSuccess(response.data, 'User assigned successfully');
     } catch (err) {
         console.log("Error:", err)

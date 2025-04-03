@@ -1,12 +1,11 @@
-import Button from "../../../components/ui/Button"
-import Loader from "../../../components/ui/Loader"
+import Button from "../../../components/common/Button"
+import Loader from "../../../components/common/Loader"
 import { useCallback, useState } from "react"
 import AddSpecialtyModal, { SpecialtyCreationData } from "./AddSpecialtyModal"
 import CategoryNode from "./CategoryNode"
 import { Category, CategoryType } from "../../../types/category"
 import { defaultPathSeparator } from "../common"
 import { buildCategoryTree } from "../../../util/category"
-import AlertBlock from "../../../components/ui/AlertBlock"
 import { useSpecialties } from "./SpecialtyProvider"
 
 const SpecialtiesPage = () => {
@@ -17,14 +16,11 @@ const SpecialtiesPage = () => {
         fetchingCategories: loadingSpecialties,
         categories,
         createCategories,
-        error: specialtyError,
-        message
     } = useSpecialties()
 
 
     const facultyData = categories ? categories[0] : undefined
     const specialties = categories?.slice(1) || []
-    const errorMessage = specialtyError && message
 
     const handleSpecialtyCreation = (data: SpecialtyCreationData): Category[] => {
         const specialtyId = crypto.randomUUID();
@@ -71,7 +67,6 @@ const SpecialtiesPage = () => {
 
     return (
         <>
-            {errorMessage && <AlertBlock key={errorMessage} absolute={true} alertMessage={errorMessage} onCloseAlert={() => { }} />}
             {facultyData && openAddSpecialtyModal && <AddSpecialtyModal onSave={async (data) => {
                 setOpenAddSpecialtyModal(false)
                 handleSaveSpecialty(data)

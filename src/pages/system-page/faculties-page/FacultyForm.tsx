@@ -1,5 +1,5 @@
 import { useRef, useState, ChangeEvent, useEffect } from "react"
-import Button from "../../../components/ui/Button"
+import Button from "../../../components/common/Button"
 import { Category, CategoryType } from "../../../types/category"
 import { defaultRootFacultyPath } from "../common"
 

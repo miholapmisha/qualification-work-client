@@ -1,13 +1,12 @@
 import UsersTable from "./users-table/UsersTable"
-import Loader from "../../components/ui/Loader";
-import Pagination from "../../components/ui/Pagination";
+import Loader from "../../components/common/Loader";
+import Pagination from "../../components/common/Pagination";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useUsers } from "../../hooks/useUsers";
 import UserFormModal from "./UserFormModal";
-import Button from "../../components/ui/Button";
+import Button from "../../components/common/Button";
 import { User, UserPayload } from "../../types/user";
-import AlertBlock from "../../components/ui/AlertBlock";
 
 const defaultPage = 1;
 const defaultItemsPerPage = 10;
@@ -31,7 +30,6 @@ const UsersPage = () => {
         createUser,
         updateUser,
         deleteUser,
-        error,
         proceedingUsersIds,
         isUserCreating
     } = useUsers({
@@ -63,7 +61,6 @@ const UsersPage = () => {
 
     return (
         <>
-            {error && <AlertBlock key={error.id} absolute={true} alertMessage={error.message} onCloseAlert={() => { }} />}
             <div className="flex-auto rounded-2xl bg-primary-50 overflow-y-auto p-16 space-y-10 flex flex-col items-center">
                 {fetchingUsers && !users && <Loader classes="m-auto" size={{ width: '86px', height: '86px' }} />}
                 {users && users.length > 0 && totalPages > 0 &&

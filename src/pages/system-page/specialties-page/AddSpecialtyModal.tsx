@@ -1,6 +1,6 @@
-import Modal from "../../../components/ui/Modal"
-import Input from "../../../components/ui/Input"
-import Button from "../../../components/ui/Button"
+import Modal from "../../../components/common/Modal"
+import Input from "../../../components/common/Input"
+import Button from "../../../components/common/Button"
 import { useState } from "react"
 
 const availableDegrees: Degree[] = [

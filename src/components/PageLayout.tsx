@@ -1,9 +1,9 @@
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { Role } from "../types/user";
 import { useAuth } from "./AuthProvider";
-import LogoutIcon from "./ui/icons/LogoutIcon";
-import NavigationSidebar from "./ui/sidebar/NavigationSidebar";
-import { SidebarOptionType } from "./ui/sidebar/SidebarOption";
+import LogoutIcon from "./common/icons/LogoutIcon";
+import NavigationSidebar from "./common/sidebar/NavigationSidebar";
+import { SidebarOptionType } from "./common/sidebar/SidebarOption";
 import { ROUTE_SIDEBAR_CONFIG } from "../routes/route-config";
 
 const getSidebarOptions = (userRoles: Role[]): SidebarOptionType[] => {

@@ -1,5 +1,5 @@
 import { RefObject } from "react"
-import Button from "../../../components/ui/Button"
+import Button from "../../../components/common/Button"
 import { TreeCategory } from "../../../types/category"
 
 type CategoryNameInputProps = {

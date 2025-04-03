@@ -1,6 +1,6 @@
-import Button from "../../../components/ui/Button";
-import PenIcon from "../../../components/ui/icons/PenIcon";
-import Loader from "../../../components/ui/Loader";
+import Button from "../../../components/common/Button";
+import PenIcon from "../../../components/common/icons/PenIcon";
+import Loader from "../../../components/common/Loader";
 import { useEditable } from "../../../hooks/useEditable";
 import { TreeCategory } from "../../../types/category";
 import CategoryNameInput from "./CategoryNameInput";

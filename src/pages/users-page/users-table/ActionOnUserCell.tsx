@@ -1,6 +1,5 @@
-import Button from "../../../components/ui/Button"
-import PenIcon from "../../../components/ui/icons/PenIcon"
-import TrashIcon from "../../../components/ui/icons/TrashIcon"
+import PenIcon from "../../../components/common/icons/PenIcon"
+import TrashIcon from "../../../components/common/icons/TrashIcon"
 
 type ActionOnUserCellProps = {
     onEditClick: () => void
@@ -10,15 +9,15 @@ type ActionOnUserCellProps = {
 const ActionOnUserCell = ({ onEditClick, onDeleteClick }: ActionOnUserCellProps) => {
 
     return (
-        <div className="flex space-x-2 text-white text-xs">
-            <Button onClick={onEditClick} classes="flex items-center space-x-2">
-                <PenIcon width={'10px'} height={'10px'} fill={"white"} />
+        <div className="flex space-x-2 text-xs">
+            <button onClick={onEditClick} className="transition-color ease-in-out duration-300 hover:bg-primary-900 hover:text-white cursor-pointer rounded-full px-4 py-1 border-1 flex items-center space-x-2">
+                <PenIcon fill="currentColor" width={'10px'} height={'10px'} />
                 <span>Edit</span>
-            </Button>
-            <Button onClick={onDeleteClick} classes="flex items-center space-x-2">
-                <TrashIcon width={'10px'} height={'10px'} fill={"white"} />
+            </button>
+            <button onClick={onDeleteClick} className="transition-color ease-in-out duration-300 hover:bg-primary-900 hover:text-white cursor-pointer rounded-full px-4 py-1 border-1 flex items-center space-x-2">
+                <TrashIcon fill="currentColor" width={'10px'} height={'10px'} />
                 <span>Delete</span>
-            </Button>
+            </button>
         </div>
     )
 }

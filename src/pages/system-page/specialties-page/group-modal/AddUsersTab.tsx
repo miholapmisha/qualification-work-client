@@ -1,8 +1,9 @@
 import { User } from "../../../../types/user";
-import SearchIcon from "../../../../components/ui/icons/SearchIcon";
+import SearchIcon from "../../../../components/common/icons/SearchIcon";
 import GroupUsersSkeleton from "./GroupUsersSkeleton";
 import { useState } from "react";
-import Button from "../../../../components/ui/Button";
+import Button from "../../../../components/common/Button";
+import CloseIcon from "../../../../components/common/icons/CloseIcon";
 
 type AddUsersTabProps = {
     searchQuery: string;
@@ -100,23 +101,14 @@ const AddUsersTab = ({ searchQuery, handleSearch, searchResults, addUserToGroup,
                             ))}
                         </div>
                     ) :
-                        <div className="flex flex-col items-center justify-center h-[340px] text-primary-500 rounded-lg">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                className="h-12 w-12 mb-2"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={1}
-                                    d="M8 16l2.879-2.879m0 0a3 3 0 104.243-4.242 3 3 0 00-4.243 4.242zM21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                                />
-                            </svg>
-                            <p className="text-center">No new students found</p>
-                            <p className="text-sm text-primary-400 mt-1">Try a different search term</p>
+                        <div className="flex flex-col items-center justify-center h-[340px] text-primary-500 rounded-lg space-y-4">
+                            <div className="border-1 border-primary-400  rounded-full p-2">
+                                <CloseIcon />
+                            </div>
+                            <div className="text-center">
+                                <p className="text-center text-2xl">No new students found</p>
+                                <p className="text-primary-400 mt-1">Try a different search term</p>
+                            </div>
                         </div>}
 
                     {/* No Results Found */}

@@ -1,11 +1,11 @@
-import Button from "../../components/ui/Button"
-import Input from "../../components/ui/Input"
-import UniversityIcon from "../../components/ui/icons/UniversityIcon"
-import Loader from "../../components/ui/Loader"
+import Button from "../../components/common/Button"
+import Input from "../../components/common/Input"
+import UniversityIcon from "../../components/common/icons/UniversityIcon"
+import Loader from "../../components/common/Loader"
 import { useForm } from "react-hook-form"
 import { startTransition, useActionState, useEffect, useRef, useState } from "react"
 import { useAuth } from "../../components/AuthProvider"
-import AlertBlock from "../../components/ui/AlertBlock"
+import AlertBlock from "../../components/common/AlertBlock"
 import { isStrongPassword } from "../../util/user"
 
 type FormState = {

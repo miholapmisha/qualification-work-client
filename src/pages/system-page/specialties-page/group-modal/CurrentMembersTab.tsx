@@ -1,4 +1,5 @@
-import UsersGroupIcon from "../../../../components/ui/icons/UsersGroupIcon";
+import CloseIcon from "../../../../components/common/icons/CloseIcon";
+import UsersGroupIcon from "../../../../components/common/icons/UsersGroupIcon";
 import { User } from "../../../../types/user";
 import GroupUsersSkeleton from "./GroupUsersSkeleton";
 
@@ -22,8 +23,8 @@ const CurrentMembersTab = ({ groupMembers, removeUserFromGroup, fetchingGroupMem
             <div className="space-y-2">
                 <div className="grid grid-cols-12 text-xs font-medium text-primary-500 py-2 px-4 sticky top-0 bg-primary-100 rounded-t-lg">
                     <div className="col-span-5">User</div>
-                    <div className="col-span-4">Email</div>
-                    <div className="col-span-1"></div>
+                    <div className="col-span-6">Email</div>
+                    <div className="col-span-1">Remove</div>
                 </div>
                 <div className={`${assigningUsers ? 'blur-sm' : null}`}>
                     {groupMembers.map((user) => (
@@ -38,23 +39,13 @@ const CurrentMembersTab = ({ groupMembers, removeUserFromGroup, fetchingGroupMem
                                 <span className="ml-3 font-medium">{user.name}</span>
                             </div>
                             <div className="col-span-4 text-primary-600 truncate">{user.email}</div>
-                            <div className="col-span-1 text-right">
+
+                            <div className="col-span-3 text-right">
                                 <button
                                     onClick={() => removeUserFromGroup(user._id)}
-                                    className="text-primary-400 hover:text-primary-700 p-1"
+                                    className="cursor-pointer"
                                 >
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        className="h-5 w-5"
-                                        viewBox="0 0 20 20"
-                                        fill="currentColor"
-                                    >
-                                        <path
-                                            fillRule="evenodd"
-                                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                                            clipRule="evenodd"
-                                        />
-                                    </svg>
+                                    <CloseIcon width={'16px'} height={'16px'} />
                                 </button>
                             </div>
                         </div>

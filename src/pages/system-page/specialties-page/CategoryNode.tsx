@@ -1,5 +1,5 @@
 import { PropsWithChildren } from "react"
-import Accordion from "../../../components/ui/Accordion"
+import Accordion from "../../../components/common/Accordion"
 import { CategoryType, TreeCategory } from "../../../types/category"
 import YearCategoryNode from "./YearCategoryNode"
 import { useSpecialties } from "./SpecialtyProvider"

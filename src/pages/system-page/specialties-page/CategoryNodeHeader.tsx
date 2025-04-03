@@ -1,5 +1,5 @@
 import { useState } from "react"
-import PenIcon from "../../../components/ui/icons/PenIcon"
+import PenIcon from "../../../components/common/icons/PenIcon"
 import { CategoryType, TreeCategory } from "../../../types/category"
 import { useSpecialties } from "./SpecialtyProvider"
 import { useEditable } from "../../../hooks/useEditable"

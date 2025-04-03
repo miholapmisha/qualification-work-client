@@ -2,7 +2,7 @@ import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "
 import { User } from "../../../types/user"
 import RoleCell from "./RoleCell"
 import ActionOnUserCell from "./ActionOnUserCell"
-import Loader from "../../../components/ui/Loader"
+import Loader from "../../../components/common/Loader"
 
 type UserTableProps = {
     users: User[],
