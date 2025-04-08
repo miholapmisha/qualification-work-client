@@ -1,5 +1,3 @@
-import Input from "./Input"
-
 type SwitchProps = {
     switchOn: boolean
     onChangeSwitchState: (value: boolean) => void

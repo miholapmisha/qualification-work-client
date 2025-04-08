@@ -10,6 +10,7 @@ import { fallbackRoute } from './routes/fallback'
 import { MutationCache, QueryCache, QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import AlertsProvider, { useAlerts } from './components/alert/AlertsProvider'
 import { ApiResponse } from './services/api/common'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 const router = createBrowserRouter([
   ...fallbackRoute,
@@ -46,6 +47,7 @@ const App = () => {
       <AuthProvider>
         <RouterProvider router={router} />
       </AuthProvider>
+      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   )
 }

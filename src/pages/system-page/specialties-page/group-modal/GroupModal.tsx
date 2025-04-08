@@ -2,7 +2,7 @@ import Modal from "../../../../components/common/Modal";
 import { useEffect, useMemo, useState } from "react";
 import CurrentMembersTab from "./CurrentMembersTab";
 import AddUsersTab from "./AddUsersTab";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { assignUsersToGroup, getUsers } from "../../../../services/api/user";
 import { Role, User } from "../../../../types/user";
 import { useDebounce } from "../../../../hooks/useDebounce";
@@ -23,9 +23,10 @@ const GroupModal = ({ isOpen, onClose, groupId }: GroupModalProps) => {
     const debouncedSearchQuery = useDebounce({ value: searchQuery, milliseconds: 1000 }) || ''
     const [groupMembers, setGroupMembers] = useState<User[]>([])
     const groupMembersIds = useMemo(() => groupMembers.map(member => member._id), [groupMembers]);
+    const queryClient = useQueryClient();
 
     const { data: searchUsersResponse, isFetching: searchingUsers } = useQuery({
-        queryKey: ['searchUsers', debouncedSearchQuery],
+        queryKey: ['searchUsers', debouncedSearchQuery, groupId],
         queryFn: () => getUsers({
             searchParams: [
                 {
@@ -46,7 +47,8 @@ const GroupModal = ({ isOpen, onClose, groupId }: GroupModalProps) => {
                 },
                 { field: 'roles', operator: FilterOperator.IN, value: [Role.STUDENT] },
             ]
-        })
+        }),
+        enabled: debouncedSearchQuery.trim() !== '',
     });
 
     const { data: groupMembersResponse, isFetching: fetchingGroupMembers } = useQuery({
@@ -55,7 +57,10 @@ const GroupModal = ({ isOpen, onClose, groupId }: GroupModalProps) => {
             searchParams: [
                 { field: 'groupId', operator: FilterOperator.EQ, value: groupId }
             ]
-        })
+        }),
+        staleTime: 1000 * 60 * 5, // 5 minutes
+        refetchOnMount: false,
+        refetchOnWindowFocus: false
     })
 
     useEffect(() => {
@@ -65,10 +70,24 @@ const GroupModal = ({ isOpen, onClose, groupId }: GroupModalProps) => {
     }, [groupMembersResponse])
 
     const { mutateAsync: assignUsersToGroupMutation, isPending: assigningUsers } = useMutation({
-        mutationFn: ({ groupId, usersIds }: { groupId: string; usersIds: string[] }) => assignUsersToGroup({ groupId, usersIds }),
-        onSettled: (response, _) => {
-            if (response && response.error && response?.data.payload) {
+        mutationFn: ({ groupId, users }: { groupId: string; users: User[] }) =>
+            assignUsersToGroup({ groupId, usersIds: users.map(user => user._id) }),
+
+        onSettled: (response, _, context) => {
+            const updatedUsers = context?.users
+            if (response && response.error) {
                 setGroupMembers((groupMembersResponse?.data.payload as User[]) || [])
+            }
+            if (response && !response.error) {
+                queryClient.setQueryData(['groupMembers', groupId], () => {
+                    return {
+                        ...groupMembersResponse,
+                        data: {
+                            ...groupMembersResponse?.data,
+                            payload: updatedUsers
+                        }
+                    }
+                })
             }
         }
     })
@@ -161,7 +180,7 @@ const GroupModal = ({ isOpen, onClose, groupId }: GroupModalProps) => {
                             {assigningUsers ? 'Close' : 'Cancel'}
                         </button>
                         <Button onClick={() => {
-                            assignUsersToGroupMutation({ groupId, usersIds: groupMembersIds })
+                            assignUsersToGroupMutation({ groupId, users: groupMembers })
                             setActiveTab("members")
                         }}>
                             Save Changes
