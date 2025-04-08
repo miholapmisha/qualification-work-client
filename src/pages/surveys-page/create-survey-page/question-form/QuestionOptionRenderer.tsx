@@ -4,6 +4,8 @@ import { TextAnswerOption } from "./TextAnswerOption";
 import MultipleChoiceOptions from "./MultipleChoiceOptions";
 import CheckboxGridOptions from "./CheckboxGridOptions";
 import SingleChoiceOptions from "./SingleChoiceOptions";
+import SquareOptionIcon from "../../../../components/common/icons/SquareOptionIcon";
+import CircleOptionIcon from "../../../../components/common/icons/CircleOptionIcon";
 
 type QuestionOptionsRendererProps = {
     type: QuestionType;
@@ -54,8 +56,22 @@ const QuestionOptionsRenderer = ({
                         onDeleteRow={onDeleteRow!}
                         onAddOption={onAddOption}
                         onDeleteOption={onDeleteOption}
+                        icon={<SquareOptionIcon width={'26px'} height={'26px'} />}
                     />
                 );
+
+            case QuestionType.MULTIPLE_CHOICE_GRID:
+                return (
+                    <CheckboxGridOptions
+                        rows={rows}
+                        options={options}
+                        onAddRow={onAddRow!}
+                        onDeleteRow={onDeleteRow!}
+                        onAddOption={onAddOption}
+                        onDeleteOption={onDeleteOption}
+                        icon={<CircleOptionIcon width={'26px'} height={'26px'} />}
+                    />
+                )
 
             case QuestionType.TEXT:
                 return <TextAnswerOption />;

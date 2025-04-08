@@ -90,14 +90,14 @@ const QuestionForm = () => {
                     return {
                         ...prev,
                         type: QuestionType.CHECKBOX_GRID,
-                        rows: 'rows' in prev ? prev.rows || [] : [{ _id: crypto.randomUUID(), text: "Row 1" }],
+                        rows: 'rows' in prev ? prev.rows || [{ _id: crypto.randomUUID(), text: "Row 1" }] : [{ _id: crypto.randomUUID(), text: "Row 1" }],
                     } as CheckboxGrid;
 
                 case QuestionType.MULTIPLE_CHOICE_GRID:
                     return {
                         ...prev,
                         type: QuestionType.MULTIPLE_CHOICE_GRID,
-                        rows: 'rows' in prev ? prev.rows || [] : []
+                        rows: 'rows' in prev ? prev.rows || [{ _id: crypto.randomUUID(), text: "Row 1" }] : [{ _id: crypto.randomUUID(), text: "Row 1" }]
                     } as MultipleChoiceGrid;
 
                 default:
@@ -113,20 +113,20 @@ const QuestionForm = () => {
     return (
         <div className="w-full min-h-[284px] rounded-lg border-2 border-primary-300 bg-white shadow-sm p-4 flex flex-col space-y-4">
             <div className="flex h-[52px] items-center justify-center space-x-4">
-                <input 
-                    autoFocus 
-                    placeholder="Question" 
-                    className="h-full px-2 flex-auto outline-none border-b-1 border-primary-400 bg-primary-100 leading-none focus:border-primary-600 transition-colors" 
+                <input
+                    autoFocus
+                    placeholder="Question"
+                    className="h-full px-2 flex-auto outline-none border-b-1 border-primary-400 bg-primary-100 leading-none focus:border-primary-600 transition-colors"
                 />
 
-                <QuestionTypeSelector 
-                    currentType={question.type} 
-                    onTypeChange={handleChangeQuestionType} 
+                <QuestionTypeSelector
+                    currentType={question.type}
+                    onTypeChange={handleChangeQuestionType}
                 />
             </div>
 
             <div className="flex-grow">
-                <QuestionOptionsRenderer 
+                <QuestionOptionsRenderer
                     type={question.type}
                     options={'options' in question ? question.options : []}
                     rows={'rows' in question ? question.rows : []}
@@ -137,9 +137,9 @@ const QuestionForm = () => {
                 />
             </div>
 
-            <QuestionControls 
-                required={question.required} 
-                onRequiredChange={handleRequiredChange} 
+            <QuestionControls
+                required={question.required}
+                onRequiredChange={handleRequiredChange}
             />
         </div>
     )

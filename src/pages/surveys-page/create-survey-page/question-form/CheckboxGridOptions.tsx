@@ -1,4 +1,4 @@
-import SquareOptionIcon from "../../../../components/common/icons/SquareOptionIcon";
+import { ReactNode } from "react";
 import { Option } from "../../../../types/survey";
 import AddItemButton from "./AddItemButton";
 import OptionItem from "./OptionItem";
@@ -7,6 +7,7 @@ import RowItem from "./RowItem";
 type CheckboxGridOptionsProps = {
     rows: Option[];
     options: Option[];
+    icon: ReactNode;
     onAddRow: () => void;
     onDeleteRow: (id: string) => void;
     onAddOption: () => void;
@@ -19,7 +20,8 @@ const CheckboxGridOptions = ({
     onAddRow,
     onDeleteRow,
     onAddOption,
-    onDeleteOption
+    onDeleteOption,
+    icon
 }: CheckboxGridOptionsProps) => {
     return (
         <div className="flex space-x-12">
@@ -48,7 +50,7 @@ const CheckboxGridOptions = ({
                         key={column._id}
                         id={column._id}
                         text={column.text}
-                        icon={<SquareOptionIcon width={'26px'} height={'26px'} />}
+                        icon={icon}
                         onDelete={onDeleteOption}
                         canDelete={options.length > 1}
                     />
@@ -56,7 +58,7 @@ const CheckboxGridOptions = ({
 
                 <AddItemButton
                     label="+ Add column"
-                    icon={<SquareOptionIcon width={'26px'} height={'26px'} />}
+                    icon={icon}
                     onClick={onAddOption}
                 />
             </div>

@@ -1,6 +1,6 @@
 import { IconProps } from "./icon-props"
 
-const TableOptionIcon = ({...props}: IconProps) => {
+const MultipleChoiceIcon = ({...props}: IconProps) => {
     return (
         <svg widths={`${props.width ? props.width : '24px'}`} height={`${props?.height ? props.height : '24px'}`} viewBox="0 -2 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
             <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -13,4 +13,4 @@ const TableOptionIcon = ({...props}: IconProps) => {
     )
 }
 
-export default TableOptionIcon
+export default MultipleChoiceIcon
