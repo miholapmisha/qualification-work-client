@@ -2,7 +2,7 @@ import PageLayout from "../components/PageLayout";
 import ProtectedRoute from "../components/ProtectedRoute";
 import SurveyPage from "../pages/surveys-page/SurveysPage";
 import { Role } from "../types/user";
-import CreateSurveyPage from "../pages/surveys-page/create-survey-page/CreateSurveyPage";
+import SurveyForm from "../pages/surveys-page/SurveyForm";
 
 export const teacherRoutes = [
     {
@@ -20,7 +20,7 @@ export const teacherRoutes = [
             {
                 path: '/surveys/create',
                 element:
-                    <CreateSurveyPage />,
+                    <SurveyForm />,
             }
         ]
     }

@@ -1,20 +1,22 @@
 import { useCallback } from "react";
-import { Option, QuestionType } from "../../../../types/survey";
+import { Option, QuestionType, TableRow } from "../../../types/survey";
 import { TextAnswerOption } from "./TextAnswerOption";
 import MultipleChoiceOptions from "./MultipleChoiceOptions";
 import CheckboxGridOptions from "./CheckboxGridOptions";
 import SingleChoiceOptions from "./SingleChoiceOptions";
-import SquareOptionIcon from "../../../../components/common/icons/SquareOptionIcon";
-import CircleOptionIcon from "../../../../components/common/icons/CircleOptionIcon";
+import SquareOptionIcon from "../../../components/common/icons/SquareOptionIcon";
+import CircleOptionIcon from "../../../components/common/icons/CircleOptionIcon";
 
 type QuestionOptionsRendererProps = {
     type: QuestionType;
     options: Option[];
-    rows?: Option[];
+    rows?: TableRow[];
     onAddOption: () => void;
     onDeleteOption: (id: string) => void;
     onAddRow?: () => void;
     onDeleteRow?: (id: string) => void;
+    onEditOption: (option: Option) => void;
+    onEditRow: (Row: TableRow) => void
 }
 
 const QuestionOptionsRenderer = ({
@@ -24,7 +26,9 @@ const QuestionOptionsRenderer = ({
     onAddOption,
     onDeleteOption,
     onAddRow,
-    onDeleteRow
+    onDeleteRow,
+    onEditOption,
+    onEditRow
 }: QuestionOptionsRendererProps) => {
 
     const renderOptions = useCallback(() => {
@@ -35,6 +39,7 @@ const QuestionOptionsRenderer = ({
                         options={options}
                         onAddOption={onAddOption}
                         onDeleteOption={onDeleteOption}
+                        onEditOption={onEditOption}
                     />
                 );
 
@@ -44,6 +49,7 @@ const QuestionOptionsRenderer = ({
                         options={options}
                         onAddOption={onAddOption}
                         onDeleteOption={onDeleteOption}
+                        onEditOption={onEditOption}
                     />
                 );
 
@@ -56,6 +62,8 @@ const QuestionOptionsRenderer = ({
                         onDeleteRow={onDeleteRow!}
                         onAddOption={onAddOption}
                         onDeleteOption={onDeleteOption}
+                        onEditOption={onEditOption}
+                        onEditRow={onEditRow}
                         icon={<SquareOptionIcon width={'26px'} height={'26px'} />}
                     />
                 );
@@ -69,6 +77,8 @@ const QuestionOptionsRenderer = ({
                         onDeleteRow={onDeleteRow!}
                         onAddOption={onAddOption}
                         onDeleteOption={onDeleteOption}
+                        onEditOption={onEditOption}
+                        onEditRow={onEditRow}
                         icon={<CircleOptionIcon width={'26px'} height={'26px'} />}
                     />
                 )

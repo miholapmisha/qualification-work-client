@@ -2,8 +2,10 @@ export type Survey = {
     _id: string,
     title: string,
     description?: string,
-    questions: BaseQuestion[],
+    questions: QuestionState[],
 }
+
+export type QuestionState = TextQuestion | SingleChoiceQuestion | MultipleChoiceQuestion | CheckboxGrid | MultipleChoiceGrid
 
 export enum QuestionType {
     MULTIPLE_CHOICE = 'multiple_choice',
@@ -13,9 +15,11 @@ export enum QuestionType {
     TEXT = 'text'
 }
 
+
+
 export interface BaseQuestion {
     _id: string
-    question: string
+    questionText: string
     type: QuestionType,
     required: boolean
 }
@@ -39,14 +43,14 @@ export interface MultipleChoiceQuestion extends BaseQuestion {
 
 export interface MultipleChoiceGrid extends BaseQuestion {
     type: QuestionType.MULTIPLE_CHOICE_GRID,
-    rows: TableRows[],
+    rows: TableRow[],
     options: Option[],
     answer?: MultipleChoiceGridAnswer[]
 }
 
 export interface CheckboxGrid extends BaseQuestion {
     type: QuestionType.CHECKBOX_GRID,
-    rows: TableRows[],
+    rows: TableRow[],
     options: Option[],
     answer?: MultipleChoiceGridAnswer[]
 }
@@ -56,7 +60,7 @@ export type TableColumns = {
     text: string
 }
 
-export type TableRows = {
+export type TableRow = {
     _id: string
     text: string
 }

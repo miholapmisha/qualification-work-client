@@ -1,17 +1,19 @@
 import { ReactNode } from "react";
-import { Option } from "../../../../types/survey";
+import { Option, TableRow } from "../../../types/survey";
 import AddItemButton from "./AddItemButton";
 import OptionItem from "./OptionItem";
 import RowItem from "./RowItem";
 
 type CheckboxGridOptionsProps = {
-    rows: Option[];
+    rows: TableRow[];
     options: Option[];
     icon: ReactNode;
     onAddRow: () => void;
     onDeleteRow: (id: string) => void;
     onAddOption: () => void;
     onDeleteOption: (id: string) => void;
+    onEditOption: (option: Option) => void;
+    onEditRow: (row: TableRow) => void;
 }
 
 const CheckboxGridOptions = ({
@@ -21,6 +23,8 @@ const CheckboxGridOptions = ({
     onDeleteRow,
     onAddOption,
     onDeleteOption,
+    onEditOption,
+    onEditRow,
     icon
 }: CheckboxGridOptionsProps) => {
     return (
@@ -29,12 +33,12 @@ const CheckboxGridOptions = ({
                 <h4 className="font-secondary">Rows:</h4>
                 {rows.map((row, index) => (
                     <RowItem
+                        row={row}
                         key={row._id}
-                        id={row._id}
-                        text={row.text}
                         index={index}
                         onDelete={onDeleteRow}
                         canDelete={rows.length > 1}
+                        onEdit={onEditRow}
                     />
                 ))}
                 <AddItemButton
@@ -48,11 +52,11 @@ const CheckboxGridOptions = ({
                 {options.map((column) => (
                     <OptionItem
                         key={column._id}
-                        id={column._id}
-                        text={column.text}
+                        option={column}
                         icon={icon}
                         onDelete={onDeleteOption}
                         canDelete={options.length > 1}
+                        onEdit={onEditOption}
                     />
                 ))}
 

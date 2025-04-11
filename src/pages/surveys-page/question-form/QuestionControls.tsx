@@ -1,6 +1,6 @@
-import CopyIcon from "../../../../components/common/icons/CopyIcon";
-import TrashIcon from "../../../../components/common/icons/TrashIcon";
-import Switch from "../../../../components/common/Switch";
+import CopyIcon from "../../../components/common/icons/CopyIcon";
+import TrashIcon from "../../../components/common/icons/TrashIcon";
+import Switch from "../../../components/common/Switch";
 
 type QuestionControlsProps = {
     required: boolean;
