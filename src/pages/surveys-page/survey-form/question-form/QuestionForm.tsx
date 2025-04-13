@@ -38,7 +38,6 @@ const QuestionForm = ({ question, onQuestionChange, onQuestionDelete, onQuestion
 
     const handleAddRow = () => {
         const prev = question
-        console.log('prev', prev)
         if ('rows' in prev) {
             const newRow = { _id: crypto.randomUUID(), text: `Row ${prev.rows.length + 1}` }
             onQuestionChange({

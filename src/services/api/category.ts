@@ -30,7 +30,6 @@ export const deleteCategory = async (params: any): Promise<ApiResponse<any>> => 
         const response = await api.delete("/category", { params } as any);
         return handleSuccess(response.data, 'Category deleted successfully');
     } catch (err) {
-        console.log("Error:", err)
         const defaultMessage = "Unable to delete category due to some internal reasons, please try again later";
         return handleError(err, defaultMessage);
     }
@@ -42,7 +41,6 @@ export const updateCategory = async ({ _id, data }: { _id: string, data: Categor
         const response = await api.put(`/category/${_id}`, { ...data });
         return handleSuccess(response.data, 'Category updated successfully');
     } catch (err) {
-        console.log("Error:", err)
         const defaultMessage = "Unable to update category due to some internal reasons, please try again later";
         return handleError(err, defaultMessage);
     }

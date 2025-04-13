@@ -14,7 +14,7 @@ export const getUsers = async (usersParams: GetUsersParams): Promise<ApiResponse
         await new Promise((resolve) => {
             setTimeout(resolve, 2000);
         });
-        console.log("Pagination: ", usersParams)
+
         const pagination = usersParams.pagination
         const url = pagination
             ? `/user/search?page=${pagination.page}&take=${pagination.take}`
@@ -58,7 +58,6 @@ export const updateUser = async ({ _id, data }: { _id: string, data: UserPayload
         const response = await api.put(`/user/${_id}`, { ...data });
         return handleSuccess(response.data, 'User updated successfully');
     } catch (err) {
-        console.log("Error:", err)
         const defaultMessage = "Unable to update user due to some internal reasons, please try again later";
         return handleError(err, defaultMessage);
     }
@@ -70,7 +69,6 @@ export const assignUsersToGroup = async ({ usersIds, groupId }: { usersIds: stri
         const response = await api.put(`/user/assign`, { usersIds, groupId });
         return handleSuccess(response.data, 'User assigned successfully');
     } catch (err) {
-        console.log("Error:", err)
         const defaultMessage = "Unable to assign users to group due to some internal reasons, please try again later";
         return handleError(err, defaultMessage);
     }

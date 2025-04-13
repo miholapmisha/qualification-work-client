@@ -122,8 +122,6 @@ const SurveyForm = () => {
         }));
     };
 
-    console.log(survey)
-
     return (
         <div className="flex-auto rounded-2xl bg-primary-50 overflow-y-auto py-12 px-8 md:px-16 lg:px-32 flex">
             <div className="w-full bg-white rounded-xl shadow-md p-4 md:p-6 lg:p-8 overflow-auto">
