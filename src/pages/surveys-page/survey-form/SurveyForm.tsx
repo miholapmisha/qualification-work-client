@@ -1,20 +1,10 @@
-import { InputHTMLAttributes, PropsWithChildren, RefObject, useRef, useState } from "react"
-import { QuestionState, QuestionType, SingleChoiceQuestion, Survey } from "../../types/survey"
-import { useEditable } from "../../hooks/useEditable"
-import Button from "../../components/common/Button";
+import { useRef, useState } from "react"
+import { QuestionState, QuestionType, SingleChoiceQuestion, Survey } from "../../../types/survey"
+import { useEditable } from "../../../hooks/useEditable"
+import Button from "../../../components/common/Button";
 import QuestionForm from "./question-form/QuestionForm";
-import InactiveEditableQuestion from "./InactiveEditableQuestion";
-
-type EditDescriptionAreaProps = PropsWithChildren<InputHTMLAttributes<HTMLTextAreaElement> & { ref?: RefObject<HTMLTextAreaElement | null> }>;
-
-const EditDescriptionArea = ({ ref, ...props }: EditDescriptionAreaProps) => {
-    return <textarea
-        autoFocus
-        ref={ref}
-        {...props}
-        className="w-full border border-primary-300 rounded-xl p-4 resize-none outline-none font-main text-primary-700 focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-all min-h-24"
-    />
-}
+import InactiveEditableQuestion from "./inactive-question/InactiveEditableQuestion";
+import EditDescriptionArea from "./EditDescriptionArea";
 
 const getDefaultQuestion = () => {
     return {
@@ -131,6 +121,8 @@ const SurveyForm = () => {
             questions: updatedQuestions,
         }));
     };
+
+    console.log(survey)
 
     return (
         <div className="flex-auto rounded-2xl bg-primary-50 overflow-y-auto py-12 px-8 md:px-16 lg:px-32 flex">

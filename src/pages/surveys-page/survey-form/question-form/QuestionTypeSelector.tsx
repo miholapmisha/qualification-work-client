@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
-import ChevronIcon from "../../../components/common/icons/ChevonIcon";
-import CircleOptionIcon from "../../../components/common/icons/CircleOptionIcon";
-import SquareOptionIcon from "../../../components/common/icons/SquareOptionIcon";
-import MultipleChoiceIcon from "../../../components/common/icons/MultipleChoiceIcon";
-import TextOptionIcon from "../../../components/common/icons/TextOptionIcon";
-import { QuestionType } from "../../../types/survey";
-import CheckboxGridIcon from "../../../components/common/icons/CheckboxGridIcon";
+import ChevronIcon from "../../../../components/common/icons/ChevonIcon";
+import UncheckedRadioIcon from "../../../../components/common/icons/UncheckedRadioIcon";
+import UncheckedCheckboxIcon from "../../../../components/common/icons/UncheckedCheckboxIcon";
+import MultipleChoiceIcon from "../../../../components/common/icons/MultipleChoiceIcon";
+import TextOptionIcon from "../../../../components/common/icons/TextOptionIcon";
+import { QuestionType } from "../../../../types/survey";
+import CheckboxGridIcon from "../../../../components/common/icons/CheckboxGridIcon";
 
 
 const QuestionTypeOptions = [
@@ -13,13 +13,13 @@ const QuestionTypeOptions = [
         id: 1,
         text: 'Single choice',
         type: QuestionType.SINGLE_CHOICE,
-        icon: <CircleOptionIcon fill="#d1d5db" width={'26px'} height={'26px'} />
+        icon: <UncheckedRadioIcon fill="#d1d5db" width={'26px'} height={'26px'} />
     },
     {
         id: 2,
         text: 'Multiple choice',
         type: QuestionType.MULTIPLE_CHOICE,
-        icon: <SquareOptionIcon fill="#d1d5db" width={'26px'} height={'26px'} />
+        icon: <UncheckedCheckboxIcon fill="#d1d5db" width={'26px'} height={'26px'} />
     },
     {
         id: 3,

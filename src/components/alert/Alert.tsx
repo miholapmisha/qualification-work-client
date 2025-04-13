@@ -4,7 +4,7 @@ import InfoIcon from "../common/icons/InfoIcon"
 
 export type AlertType = {
     id: string
-    type: 'success' | 'error',
+    type: 'success' | 'error' | 'warning' | 'info',
     message: string,
     timeout?: number
 }
@@ -16,7 +16,9 @@ type AlertProps = {
 
 const alertStyles = {
     success: 'bg-green-600',
-    error: 'bg-red-600'
+    error: 'bg-red-600',
+    warning: 'bg-yellow-400',
+    info: 'bg-cyan-600',
 }
 
 const Alert = ({ alert, onClose }: AlertProps) => {

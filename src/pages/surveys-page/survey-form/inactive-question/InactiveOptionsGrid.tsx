@@ -1,5 +1,5 @@
 import { ReactElement } from "react"
-import { MultipleChoiceGrid, } from "../../types/survey"
+import { MultipleChoiceGrid, } from "../../../../types/survey"
 
 type InactiveOptionsGridProps =
     (Pick<MultipleChoiceGrid, "rows" | "options">) & { icon?: ReactElement }

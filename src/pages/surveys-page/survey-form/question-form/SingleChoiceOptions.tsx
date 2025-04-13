@@ -1,5 +1,5 @@
-import CircleOptionIcon from "../../../components/common/icons/CircleOptionIcon";
-import { Option } from "../../../types/survey";
+import UncheckedRadioIcon from "../../../../components/common/icons/UncheckedRadioIcon";
+import { Option } from "../../../../types/survey";
 import AddItemButton from "./AddItemButton";
 import OptionItem from "./OptionItem";
 
@@ -17,7 +17,7 @@ const SingleChoiceOptions = ({ options, onAddOption, onDeleteOption, onEditOptio
                 <OptionItem
                     key={option._id}
                     option={option}
-                    icon={<CircleOptionIcon width={'26px'} height={'26px'} />}
+                    icon={<UncheckedRadioIcon width={'26px'} height={'26px'} />}
                     onDelete={onDeleteOption}
                     canDelete={options.length > 1}
                     onEdit={onEditOption}
@@ -26,7 +26,7 @@ const SingleChoiceOptions = ({ options, onAddOption, onDeleteOption, onEditOptio
 
             <AddItemButton
                 label="+ Add option"
-                icon={<CircleOptionIcon width={'26px'} height={'26px'} />}
+                icon={<UncheckedRadioIcon width={'26px'} height={'26px'} />}
                 onClick={onAddOption}
             />
         </div>

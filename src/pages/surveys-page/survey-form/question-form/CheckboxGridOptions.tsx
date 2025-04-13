@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { Option, TableRow } from "../../../types/survey";
+import { Option, TableRow } from "../../../../types/survey";
 import AddItemButton from "./AddItemButton";
 import OptionItem from "./OptionItem";
 import RowItem from "./RowItem";

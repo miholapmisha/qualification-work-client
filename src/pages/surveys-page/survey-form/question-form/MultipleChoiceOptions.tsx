@@ -1,5 +1,5 @@
-import SquareOptionIcon from "../../../components/common/icons/SquareOptionIcon";
-import { Option } from "../../../types/survey";
+import UncheckedCheckboxIcon from "../../../../components/common/icons/UncheckedCheckboxIcon";
+import { Option } from "../../../../types/survey";
 import AddItemButton from "./AddItemButton";
 import OptionItem from "./OptionItem";
 
@@ -17,7 +17,7 @@ const MultipleChoiceOptions = ({ options, onAddOption, onDeleteOption, onEditOpt
                 <OptionItem
                     key={option._id}
                     option={option}
-                    icon={<SquareOptionIcon width={'26px'} height={'26px'} />}
+                    icon={<UncheckedCheckboxIcon width={'26px'} height={'26px'} />}
                     onDelete={onDeleteOption}
                     canDelete={options.length > 1}
                     onEdit={onEditOption}
@@ -26,7 +26,7 @@ const MultipleChoiceOptions = ({ options, onAddOption, onDeleteOption, onEditOpt
 
             <AddItemButton
                 label="+ Add option"
-                icon={<SquareOptionIcon width={'26px'} height={'26px'} />}
+                icon={<UncheckedCheckboxIcon width={'26px'} height={'26px'} />}
                 onClick={onAddOption}
             />
         </div>

@@ -70,7 +70,7 @@ const UsersPage = () => {
                                 proceedingUsersIds={proceedingUsersIds}
                                 onEditUser={(user: User) => setEditableUser(user)} users={users} />
                         </div>
-                        <Button disabled={isUserCreating} className={`disabled:bg-primary-100 disabled:text-primary-400 mr-auto hover:bg-primary-300 text-sm text-primary-600 rounded-2xl cursor-pointer px-4 py-2 bg-primary-200`}
+                        <button disabled={isUserCreating} className={`disabled:bg-primary-100 disabled:text-primary-400 mr-auto hover:bg-primary-300 text-sm text-primary-600 rounded-2xl cursor-pointer px-4 py-2 bg-primary-200`}
                             onClick={() => { setEditableUser(undefined) }}>
                             {isUserCreating ?
                                 <div className="flex items-center space-x-2">
@@ -80,7 +80,7 @@ const UsersPage = () => {
                                 <span>+ Add user</span>
                             }
 
-                        </Button>
+                        </button>
                     </>
                 }
 

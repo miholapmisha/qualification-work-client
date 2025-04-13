@@ -15,8 +15,6 @@ export enum QuestionType {
     TEXT = 'text'
 }
 
-
-
 export interface BaseQuestion {
     _id: string
     questionText: string
@@ -38,7 +36,7 @@ export interface SingleChoiceQuestion extends BaseQuestion {
 export interface MultipleChoiceQuestion extends BaseQuestion {
     type: QuestionType.MULTIPLE_CHOICE
     options: Option[],
-    answers?: string[]
+    answer?: string[]
 }
 
 export interface MultipleChoiceGrid extends BaseQuestion {
@@ -52,7 +50,7 @@ export interface CheckboxGrid extends BaseQuestion {
     type: QuestionType.CHECKBOX_GRID,
     rows: TableRow[],
     options: Option[],
-    answer?: MultipleChoiceGridAnswer[]
+    answer?: CheckboxGridAnswer[]
 }
 
 export type TableColumns = {
@@ -72,7 +70,7 @@ export type MultipleChoiceGridAnswer = {
 
 export type CheckboxGridAnswer = {
     row: string,
-    column: string[],
+    columns: string[],
 }
 
 export type Option = {

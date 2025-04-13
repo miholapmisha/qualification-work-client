@@ -1,9 +1,9 @@
 import { useCallback } from "react"
-import { QuestionState, QuestionType } from "../../types/survey"
-import OptionItem from "./question-form/OptionItem"
-import CircleOptionIcon from "../../components/common/icons/CircleOptionIcon"
-import SquareOptionIcon from "../../components/common/icons/SquareOptionIcon"
-import { TextAnswerOption } from "./question-form/TextAnswerOption"
+import { QuestionState, QuestionType } from "../../../../types/survey"
+import OptionItem from "../question-form/OptionItem"
+import UncheckedRadioIcon from "../../../../components/common/icons/UncheckedRadioIcon"
+import UncheckedCheckboxIcon from "../../../../components/common/icons/UncheckedCheckboxIcon"
+import { TextAnswerOption } from "../question-form/TextAnswerOption"
 import InactiveOptionsGrid from "./InactiveOptionsGrid"
 
 type InactiveQuestionRendererProps = {
@@ -25,7 +25,7 @@ const InactiveEditableQuestion = ({ question, onSetEditable }: InactiveQuestionR
                                 key={option._id}
                                 canDelete={false}
                                 option={option}
-                                icon={<CircleOptionIcon width={'26px'} height={'26px'} />}
+                                icon={<UncheckedRadioIcon width={'26px'} height={'26px'} />}
                                 editable={false}
                             />
                         ))}
@@ -38,7 +38,7 @@ const InactiveEditableQuestion = ({ question, onSetEditable }: InactiveQuestionR
                             <OptionItem
                                 key={option._id}
                                 canDelete={false}
-                                icon={<SquareOptionIcon width={'26px'} height={'26px'} />}
+                                icon={<UncheckedCheckboxIcon width={'26px'} height={'26px'} />}
                                 option={option}
                                 editable={false}
                             />
@@ -46,10 +46,10 @@ const InactiveEditableQuestion = ({ question, onSetEditable }: InactiveQuestionR
                     </div>
                 )
             case QuestionType.CHECKBOX_GRID:
-                return <InactiveOptionsGrid icon={<SquareOptionIcon width={'26px'} height={'26px'} />} rows={question.rows} options={question.options} />
+                return <InactiveOptionsGrid icon={<UncheckedCheckboxIcon width={'26px'} height={'26px'} />} rows={question.rows} options={question.options} />
 
             case QuestionType.MULTIPLE_CHOICE_GRID:
-                return <InactiveOptionsGrid icon={<CircleOptionIcon width={'26px'} height={'26px'} />} rows={question.rows} options={question.options} />
+                return <InactiveOptionsGrid icon={<UncheckedRadioIcon width={'26px'} height={'26px'} />} rows={question.rows} options={question.options} />
         }
     }, [question])
 

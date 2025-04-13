@@ -1,11 +1,11 @@
 import { useCallback } from "react";
-import { Option, QuestionType, TableRow } from "../../../types/survey";
+import { Option, QuestionType, TableRow } from "../../../../types/survey";
 import { TextAnswerOption } from "./TextAnswerOption";
 import MultipleChoiceOptions from "./MultipleChoiceOptions";
 import CheckboxGridOptions from "./CheckboxGridOptions";
 import SingleChoiceOptions from "./SingleChoiceOptions";
-import SquareOptionIcon from "../../../components/common/icons/SquareOptionIcon";
-import CircleOptionIcon from "../../../components/common/icons/CircleOptionIcon";
+import UncheckedCheckboxIcon from "../../../../components/common/icons/UncheckedCheckboxIcon";
+import UncheckedRadioIcon from "../../../../components/common/icons/UncheckedRadioIcon";
 
 type QuestionOptionsRendererProps = {
     type: QuestionType;
@@ -64,7 +64,7 @@ const QuestionOptionsRenderer = ({
                         onDeleteOption={onDeleteOption}
                         onEditOption={onEditOption}
                         onEditRow={onEditRow}
-                        icon={<SquareOptionIcon width={'26px'} height={'26px'} />}
+                        icon={<UncheckedCheckboxIcon width={'26px'} height={'26px'} />}
                     />
                 );
 
@@ -79,7 +79,7 @@ const QuestionOptionsRenderer = ({
                         onDeleteOption={onDeleteOption}
                         onEditOption={onEditOption}
                         onEditRow={onEditRow}
-                        icon={<CircleOptionIcon width={'26px'} height={'26px'} />}
+                        icon={<UncheckedRadioIcon width={'26px'} height={'26px'} />}
                     />
                 )
 

@@ -25,7 +25,7 @@ const AlertsProvider = ({ children }: PropsWithChildren) => {
             {children}
             {alertContainer &&
                 createPortal(
-                    <div className="absolute top-0 right-2 space-y-2">
+                    <div className="z-10 absolute top-0 right-2 space-y-2">
                         {alerts.map(alert => (
                             <Alert key={alert.id} alert={alert} onClose={(alert) => removeAlert(alert)} />
                         ))}

@@ -1,6 +1,6 @@
 import { ChangeEvent } from "react";
-import CloseIcon from "../../../components/common/icons/CloseIcon";
-import { TableRow as TableRow } from "../../../types/survey";
+import CloseIcon from "../../../../components/common/icons/CloseIcon";
+import { TableRow as TableRow } from "../../../../types/survey";
 
 type RowItemProps = {
     row: TableRow;

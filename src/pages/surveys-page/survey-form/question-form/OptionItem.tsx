@@ -1,6 +1,6 @@
 import { ChangeEvent, ReactNode } from "react"
-import CloseIcon from "../../../components/common/icons/CloseIcon";
-import { Option } from "../../../types/survey";
+import CloseIcon from "../../../../components/common/icons/CloseIcon";
+import { Option } from "../../../../types/survey";
 
 type OptionItemProps = {
     option: Option;

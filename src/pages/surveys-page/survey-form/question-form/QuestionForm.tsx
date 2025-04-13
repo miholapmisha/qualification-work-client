@@ -1,5 +1,5 @@
 import { ChangeEvent, useEffect, useState } from "react"
-import { TextQuestion, SingleChoiceQuestion, MultipleChoiceQuestion, CheckboxGrid, MultipleChoiceGrid, QuestionType, QuestionState, Option, TableRow } from "../../../types/survey"
+import { TextQuestion, SingleChoiceQuestion, MultipleChoiceQuestion, CheckboxGrid, MultipleChoiceGrid, QuestionType, QuestionState, Option, TableRow } from "../../../../types/survey"
 import QuestionControls from "./QuestionControls"
 import QuestionOptionsRenderer from "./QuestionOptionRenderer"
 import QuestionTypeSelector from "./QuestionTypeSelector"
