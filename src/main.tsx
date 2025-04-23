@@ -8,9 +8,10 @@ import { adminRoutes } from './routes/admin'
 import { teacherRoutes } from './routes/teacher'
 import { fallbackRoute } from './routes/fallback'
 import { MutationCache, QueryCache, QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import AlertsProvider, { useAlerts } from './components/alert/AlertsProvider'
-import { ApiResponse } from './services/api/common'
+import AlertsProvider from './components/alert/AlertsProvider'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import AlertListener, { createAlertEvent } from './components/alert/AlertListener'
+import { ApiResponse } from './services/api/common'
 
 const router = createBrowserRouter([
   ...fallbackRoute,
@@ -19,43 +20,33 @@ const router = createBrowserRouter([
   ...teacherRoutes
 ])
 
-const App = () => {
-
-  const { addAlert } = useAlerts()
-
-  const handleErrorResponse = (response: ApiResponse<any>) => {
-    if (response && response.error) {
-      addAlert({ id: crypto.randomUUID(), message: response.data.message, type: "error" })
+const queryClient = new QueryClient({
+  queryCache: new QueryCache({
+    onSettled: (data, _, __) => {
+      createAlertEvent(data as ApiResponse);
     }
-  }
-
-  const queryClient = new QueryClient({
-    queryCache: new QueryCache({
-      onSettled: (data, _, __) => {
-        handleErrorResponse(data as ApiResponse<any>)
-      }
-    }),
-    mutationCache: new MutationCache({
-      onSettled: (data, _, __) => {
-        handleErrorResponse(data as ApiResponse<any>)
-      }
-    })
+  }),
+  mutationCache: new MutationCache({
+    onSettled: (data, _, __) => {
+      createAlertEvent(data as ApiResponse);
+    }
   })
+})
 
+const App = () => {
   return (
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <RouterProvider router={router} />
-      </AuthProvider>
-      <ReactQueryDevtools initialIsOpen={false} />
-    </QueryClientProvider>
-  )
-}
+    <StrictMode>
+      <QueryClientProvider client={queryClient}>
+        <AlertsProvider>
+          <AlertListener />
+          <AuthProvider>
+            <RouterProvider router={router} />
+          </AuthProvider>
+          <ReactQueryDevtools initialIsOpen={false} />
+        </AlertsProvider>
+      </QueryClientProvider>
+    </StrictMode>
+  );
+};
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <AlertsProvider>
-      <App />
-    </AlertsProvider>
-  </StrictMode>
-)
+createRoot(document.getElementById('root')!).render(<App />);

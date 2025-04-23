@@ -1,4 +1,4 @@
-import { ReactElement } from "react"
+import { Fragment, ReactElement } from "react"
 import { MultipleChoiceGrid, } from "../../../../types/survey"
 
 type InactiveOptionsGridProps =
@@ -27,18 +27,16 @@ const InactiveOptionsGrid = ({ rows, options, icon }: InactiveOptionsGridProps) 
                 </div>
             ))}
 
-            {rows.map(row => (
-                <>
-                    <div key={`label-${row._id}`}>
-                        {row.text}
-                    </div>
+            {rows.map((row) => (
+                <Fragment key={row._id}>
+                    <div key={`label-${row._id}`}>{row.text}</div>
 
-                    {options.map(option => (
+                    {options.map((option) => (
                         <div key={`${row._id}-${option._id}`} className="flex justify-center">
                             {icon}
                         </div>
                     ))}
-                </>
+                </Fragment>
             ))}
         </div>
     )

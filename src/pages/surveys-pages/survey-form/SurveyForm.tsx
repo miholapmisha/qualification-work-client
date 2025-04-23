@@ -1,10 +1,11 @@
-import { useRef, useState } from "react"
-import { QuestionState, QuestionType, SingleChoiceQuestion, Survey } from "../../../types/survey"
+import { useMemo, useRef, useState } from "react"
+import { GeneralQuestionType, QuestionType, SingleChoiceQuestion, Survey, SurveyPayload } from "../../../types/survey"
 import { useEditable } from "../../../hooks/useEditable"
-import Button from "../../../components/common/Button";
 import QuestionForm from "./question-form/QuestionForm";
 import InactiveEditableQuestion from "./inactive-question/InactiveEditableQuestion";
 import EditDescriptionArea from "./EditDescriptionArea";
+import Button from "../../../components/common/Button";
+import { useAuth } from "../../../components/AuthProvider";
 
 const getDefaultQuestion = () => {
     return {
@@ -18,17 +19,25 @@ const getDefaultQuestion = () => {
     } as SingleChoiceQuestion
 }
 
-const SurveyForm = () => {
+type SurveyFormProps = {
+    surveyData?: Survey
+    onSave: (survey: SurveyPayload) => void
+}
 
-    const defaultQuestion = getDefaultQuestion()
+const SurveyForm = ({ surveyData, onSave }: SurveyFormProps) => {
 
-    const [survey, setSurvey] = useState<Survey>({
-        _id: crypto.randomUUID(),
+    const defaultQuestion = useMemo(() => getDefaultQuestion(), [])
+    const { currentUser } = useAuth()
+
+    const [surveyState, setSurveyState] = useState<SurveyPayload>(surveyData ? surveyData : {
         title: 'Your Survey',
-        questions: [defaultQuestion]
+        questions: [defaultQuestion],
+        authorId: currentUser?._id || '',
     })
 
-    const [editQuestionId, setEditQuestionId] = useState<string | null>(defaultQuestion._id)
+
+
+    const [editQuestionId, setEditQuestionId] = useState<string | null>(surveyState.questions[0]._id)
 
     const { editInputRef: editNameInputRef, edit, setEdit } = useEditable()
     const descriptionInputRef = useRef<HTMLTextAreaElement>(null)
@@ -40,9 +49,9 @@ const SurveyForm = () => {
         const newValue = descriptionInputRef.current.value
 
         if (newValue === '') {
-            setSurvey(prevSurvey => ({ ...prevSurvey, description: undefined }))
+            setSurveyState(prevSurvey => ({ ...prevSurvey, description: undefined }))
         } else {
-            setSurvey(prevSurvey => ({ ...prevSurvey, description: newValue }))
+            setSurveyState(prevSurvey => ({ ...prevSurvey, description: newValue }))
         }
 
         setEditDescription(false);
@@ -53,54 +62,54 @@ const SurveyForm = () => {
 
         const newValue = editNameInputRef.current.value
         if (newValue === '') {
-            setSurvey(prevSurvey => ({ ...prevSurvey, title: 'Your Survey' }))
+            setSurveyState(prevSurvey => ({ ...prevSurvey, title: 'Your Survey' }))
         } else {
-            setSurvey(prevSurvey => ({ ...prevSurvey, title: newValue }))
+            setSurveyState(prevSurvey => ({ ...prevSurvey, title: newValue }))
         }
         setEdit(false);
     }
 
-    const updateQuestion = (question: QuestionState) => {
-        const updateQuestions = survey.questions
-        const updateIndex = survey.questions.findIndex(q => q._id === question._id)
+    const updateQuestion = (question: GeneralQuestionType) => {
+        const updateQuestions = surveyState.questions
+        const updateIndex = surveyState.questions.findIndex(q => q._id === question._id)
 
         if (updateIndex === -1)
             return
         updateQuestions[updateIndex] = question
-        setSurvey(prev => ({
+        setSurveyState(prev => ({
             ...prev,
             questions: updateQuestions
         }))
     }
 
     const handleAddDescription = () => {
-        setSurvey(prev => ({ ...prev, description: '' }));
+        setSurveyState(prev => ({ ...prev, description: '' }));
         setEditDescription(true);
     }
 
     const handleAddQuestion = () => {
         const defaultQuestion = getDefaultQuestion()
-        setSurvey(prev => ({ ...prev, questions: [...prev.questions, defaultQuestion] }))
+        setSurveyState(prev => ({ ...prev, questions: [...prev.questions, defaultQuestion] }))
         setEditQuestionId(defaultQuestion._id)
     }
 
     const handleQuestionDelete = (questionId: string) => {
-        setSurvey(prev => ({
+        setSurveyState(prev => ({
             ...prev,
             questions: prev.questions.filter(question => question._id !== questionId)
         }))
 
-        const deleteQuestionIndex = survey.questions.findIndex(question => question._id === questionId)
+        const deleteQuestionIndex = surveyState.questions.findIndex(question => question._id === questionId)
         if (deleteQuestionIndex - 1 > 0) {
-            setEditQuestionId(survey.questions[deleteQuestionIndex - 1]._id)
+            setEditQuestionId(surveyState.questions[deleteQuestionIndex - 1]._id)
         } else {
-            setEditQuestionId(survey.questions[0]._id)
+            setEditQuestionId(surveyState.questions[0]._id)
         }
     }
 
-    const handleQuestionCopy = (questionToCopy: QuestionState) => {
+    const handleQuestionCopy = (questionToCopy: GeneralQuestionType) => {
 
-        const questionIndex = survey.questions.findIndex((q) => q._id === questionToCopy._id);
+        const questionIndex = surveyState.questions.findIndex((q) => q._id === questionToCopy._id);
 
         if (questionIndex === -1) return;
 
@@ -109,14 +118,14 @@ const SurveyForm = () => {
             _id: crypto.randomUUID(),
         };
         const updatedQuestions = [
-            ...survey.questions.slice(0, questionIndex + 1),
+            ...surveyState.questions.slice(0, questionIndex + 1),
             copiedQuestion,
-            ...survey.questions.slice(questionIndex + 1),
+            ...surveyState.questions.slice(questionIndex + 1),
         ];
 
         setEditQuestionId(copiedQuestion._id)
 
-        setSurvey((prev) => ({
+        setSurveyState((prev) => ({
             ...prev,
             questions: updatedQuestions,
         }));
@@ -132,7 +141,7 @@ const SurveyForm = () => {
                                 <input
                                     onBlur={handleTitleBlur}
                                     ref={editNameInputRef}
-                                    defaultValue={survey.title}
+                                    defaultValue={surveyState.title}
                                     className="text-3xl md:text-4xl lg:text-5xl font-secondary font-bold flex-auto outline-none border-b border-primary-400 h-16 leading-none focus:border-primary-600 transition-colors"
                                     placeholder="Survey Title"
                                 />
@@ -141,20 +150,20 @@ const SurveyForm = () => {
                                     onClick={() => setEdit(true)}
                                     className="hover:cursor-text py-2 text-3xl md:text-4xl lg:text-5xl font-secondary font-bold flex-auto h-16 leading-none hover:text-primary-600 transition-colors"
                                 >
-                                    {survey.title || "Untitled Survey"}
+                                    {surveyState.title || "Untitled Survey"}
                                 </h1>
                             )}
                         </div>
                     </div>
 
                     <div className="space-y-2">
-                        {survey.description !== undefined ? (
+                        {surveyState.description !== undefined ? (
                             <div className="space-y-2">
                                 <h2 className="text-gray-700 font-medium">Description</h2>
-                                {editDescription || survey.description === '' ? (
+                                {editDescription || surveyState.description === '' ? (
                                     <EditDescriptionArea
                                         ref={descriptionInputRef}
-                                        defaultValue={survey.description}
+                                        defaultValue={surveyState.description}
                                         onBlur={handleDescriptionBlur}
                                         placeholder="Enter survey description..."
                                         className="w-full min-h-24 p-3 border border-gray-300 rounded-lg focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-all"
@@ -164,7 +173,7 @@ const SurveyForm = () => {
                                         onClick={() => setEditDescription(true)}
                                         className="cursor-pointer hover:text-primary-600 transition-colors font-secondary py-2"
                                     >
-                                        {survey.description}
+                                        {surveyState.description}
                                     </p>
                                 )}
                             </div>
@@ -179,8 +188,8 @@ const SurveyForm = () => {
                     </div>
 
                     <div className="flex-grow flex-col items-center flex w-full space-y-8 py-6">
-                        {survey.questions && survey.questions.length > 0 ? (
-                            survey.questions.map((question) =>
+                        {surveyState.questions && surveyState.questions.length > 0 ? (
+                            surveyState.questions.map((question) =>
                                 question._id === editQuestionId ? (
                                     <QuestionForm
                                         key={question._id}
@@ -199,17 +208,23 @@ const SurveyForm = () => {
                             )
                         ) : (
                             <div className="text-center py-10 text-gray-500">
-                                No questions yet. Add your first question below.
+                                No questions yet. Add your question below.
                             </div>
                         )}
-                    </div>
 
-                    <div className="self-center py-4">
-                        <Button
+                    </div>
+                    <div className="flex justify-between py-4">
+                        <button
+                            className=' hover:bg-primary-300 text-sm text-primary-600 rounded-2xl cursor-pointer px-4 py-2 bg-primary-200'
                             onClick={handleAddQuestion}
                         >
                             <span className="hidden sm:inline">+</span> Add question
+                        </button>
+
+                        <Button onClick={() => onSave(surveyState)}>
+                            Save Changes
                         </Button>
+
                     </div>
                 </div>
             </div>

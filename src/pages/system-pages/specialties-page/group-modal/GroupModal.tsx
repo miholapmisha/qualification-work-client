@@ -19,7 +19,7 @@ type GroupModalProps = {
 const GroupModal = ({ isOpen, onClose, groupId }: GroupModalProps) => {
 
     const [searchQuery, setSearchQuery] = useState("")
-    const [activeTab, setActiveTab] = useState("members")
+    const [activeTab, setActiveTab] = useState<"members" | "search">("members")
     const debouncedSearchQuery = useDebounce({ value: searchQuery, milliseconds: 1000 }) || ''
     const [groupMembers, setGroupMembers] = useState<User[]>([])
     const groupMembersIds = useMemo(() => groupMembers.map(member => member._id), [groupMembers]);
@@ -125,7 +125,7 @@ const GroupModal = ({ isOpen, onClose, groupId }: GroupModalProps) => {
                         <div className="flex border-b border-primary-200">
                             <button
                                 className={`flex items-center cursor-pointer py-2 px-4 font-medium text-sm -mb-px ${activeTab === "members"
-                                    ? "border-b-2 border-primary-700 text-primary-800"
+                                    ? "border-b-2 text-cyan-600 border-cyan-600"
                                     : "text-primary-500 hover:text-primary-700"
                                     }`}
                                 onClick={() => setActiveTab("members")}
@@ -134,7 +134,7 @@ const GroupModal = ({ isOpen, onClose, groupId }: GroupModalProps) => {
                                 {fetchingGroupMembers ?
                                     <Loader classes="ml-2" size={{ width: '12px', height: '12px' }} />
                                     :
-                                    <span className="ml-2 bg-primary-100 text-primary-700 px-2 py-0.5 rounded-full text-xs">
+                                    <span className="ml-2 bg-primary-100  px-2 py-0.5 rounded-full text-xs">
                                         {groupMembers.length}
                                     </span>
                                 }
@@ -142,8 +142,8 @@ const GroupModal = ({ isOpen, onClose, groupId }: GroupModalProps) => {
                             </button>
                             <button
                                 className={`cursor-pointer py-2 px-4 font-medium text-sm -mb-px ${activeTab === "search"
-                                    ? "border-b-2 border-primary-700 text-primary-800"
-                                    : "text-primary-500 hover:text-primary-700"
+                                    ? "border-b-2 text-cyan-600 border-cyan-600"
+                                    : " hover:text-primary-700"
                                     }`}
                                 onClick={() => setActiveTab("search")}
                             >

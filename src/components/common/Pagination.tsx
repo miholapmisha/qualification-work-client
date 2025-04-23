@@ -3,14 +3,13 @@ import Button from "./Button"
 import { useSearchParams } from "react-router-dom"
 
 type PaginationProps = {
-    totalPages: number,
-    selectedPage: number,
-    setSelectedPage: (page: number) => void
+    totalPages: number
 }
 
-const Pagination = ({ totalPages, selectedPage, setSelectedPage }: PaginationProps) => {
+const Pagination = ({ totalPages }: PaginationProps) => {
 
-    const [, setSearchParams] = useSearchParams()
+    const [searchParams, setSearchParams] = useSearchParams()
+    const selectedPage = Number(searchParams.get('page')) || 1
 
     const getPaginationArray = useCallback((currentPage: number) => {
         const edgeRange = 5;
@@ -53,6 +52,14 @@ const Pagination = ({ totalPages, selectedPage, setSelectedPage }: PaginationPro
         return paginationArray;
     }, [totalPages, selectedPage])
 
+    const handlePageChange = (value: string) => {
+        setSearchParams(prev => {
+            const params = new URLSearchParams(prev);
+            params.set('page', value);
+            return params;
+        })
+    }
+
     const renderPaginationArray = useMemo(() => {
         return getPaginationArray(selectedPage).map((item, index) => {
             if (+item) {
@@ -60,8 +67,7 @@ const Pagination = ({ totalPages, selectedPage, setSelectedPage }: PaginationPro
                     return <Button key={index}>{item}</Button>
                 }
                 return <button key={index} className={"hover:bg-primary-200 cursor-pointer rounded border-1 px-4 py-2"} onClick={() => {
-                    setSelectedPage(+item)
-                    setSearchParams({ 'page': `${+item}` })
+                    handlePageChange(item)
                 }}>{item}</button>
             } else {
                 return <span className="text-xl tracking-widest">...</span>
@@ -71,15 +77,13 @@ const Pagination = ({ totalPages, selectedPage, setSelectedPage }: PaginationPro
 
     const handlePreviousButtonClick = () => {
         if (selectedPage - 1 > 0) {
-            setSelectedPage(selectedPage - 1)
-            setSearchParams({ 'page': `${+selectedPage - 1}` })
+            handlePageChange(`${selectedPage - 1}`)
         }
     }
 
     const handleNextButtonClick = () => {
         if (selectedPage + 1 <= totalPages) {
-            setSelectedPage(selectedPage + 1)
-            setSearchParams({ 'page': `${+selectedPage + 1}` })
+            handlePageChange(`${selectedPage + 1}`)
         }
     }
 

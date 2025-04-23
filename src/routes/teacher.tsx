@@ -1,9 +1,10 @@
 import PageLayout from "../components/PageLayout";
 import ProtectedRoute from "../components/ProtectedRoute";
-import SurveyPage from "../pages/surveys-page/SurveysPage";
+import SurveyPage from "../pages/surveys-pages/surveys-page/SurveysPage";
 import { Role } from "../types/user";
-import SurveyForm from "../pages/surveys-page/survey-form/SurveyForm";
-import SurveyTaker from "../pages/surveys-page/survey-taker/SurveyTaker";
+import SurveyTaker from "../pages/surveys-pages/survey-taker/SurveyTaker";
+import CreateSurveyPage from "../pages/surveys-pages/create-survey-page/CreateSurveyPage";
+import EditSurveyPage from "../pages/surveys-pages/edit-survey-page/EditSurveyPage";
 
 export const teacherRoutes = [
     {
@@ -16,17 +17,21 @@ export const teacherRoutes = [
             {
                 path: '/surveys',
                 element:
-                    <SurveyPage />,
+                    <SurveyPage />
             },
             {
                 path: '/surveys/create',
                 element:
-                    <SurveyForm />,
+                    <CreateSurveyPage />,
             },
             {
                 path: '/surveys/take/:id',
                 element:
                     <SurveyTaker />,
+            },
+            {
+                path: '/surveys/edit/:surveyId',
+                element: <EditSurveyPage />
             }
         ]
     }

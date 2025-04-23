@@ -1,4 +1,4 @@
-import { QuestionState, QuestionType } from "../../../../types/survey"
+import { GeneralQuestionType, QuestionType } from "../../../../types/survey"
 import CheckboxGridRenderer from "./CheckboxGridRenderer"
 import MultipleChoiceGridRenderer from "./MultipleChoiceGridRenderer"
 import MultipleChoiceRenderer from "./MultipleChoiceRenderer"
@@ -6,7 +6,7 @@ import SingleChoiceRenderer from "./SingleChoiceRenderer"
 import TextQuestionRenderer from "./TextQuestionRenderer"
 
 type QuestionTakerProps = {
-    question: QuestionState
+    question: GeneralQuestionType
     onChooseAnswer: (questionId: string, answer: any) => void,
     error?: boolean
 }

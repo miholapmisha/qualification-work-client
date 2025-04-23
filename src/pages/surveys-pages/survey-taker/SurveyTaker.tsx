@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom"
 import QuestionTaker from "./question-taker/QuestionTaker"
-import { CheckboxGrid, CheckboxGridAnswer, MultipleChoiceGrid, MultipleChoiceGridAnswer, MultipleChoiceQuestion, QuestionState, QuestionType, SingleChoiceQuestion, Survey, TextQuestion } from "../../../types/survey"
+import { CheckboxGrid, CheckboxGridAnswer, MultipleChoiceGrid, MultipleChoiceGridAnswer, MultipleChoiceQuestion, GeneralQuestionType, QuestionType, SingleChoiceQuestion, Survey, TextQuestion } from "../../../types/survey"
 import { useState } from "react"
 import Button from "../../../components/common/Button"
 import { useAlerts } from "../../../components/alert/AlertsProvider"
@@ -283,7 +283,7 @@ const SurveyTaker = () => {
                     <div className="flex-grow flex-col items-center flex w-full space-y-8 py-6">
 
                         {surveyState.questions.map((question) => (
-                            <QuestionTaker onChooseAnswer={chooseAnswer} error={invalidSubmit && invalidQuestionsIds.includes(question._id)} key={`${question._id}-${survey._id}`} question={question as QuestionState} />
+                            <QuestionTaker onChooseAnswer={chooseAnswer} error={invalidSubmit && invalidQuestionsIds.includes(question._id)} key={`${question._id}-${survey._id}`} question={question as GeneralQuestionType} />
                         ))}
 
                         <div className="self-center py-4 space-x-4">

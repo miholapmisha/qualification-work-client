@@ -18,3 +18,8 @@ export type FilterObject = {
     operator: FilterOperator,
     value: any
 }
+
+export type FetchParams = {
+    searchParams?: FilterObject[],
+    pagination?: { page: number; take: number }
+}

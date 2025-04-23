@@ -1,15 +1,10 @@
-import { FilterObject } from "../../types/filtering";
+import { FetchParams } from "../../types/filtering";
 import { PaginationObject } from "../../types/pagination";
 import { User, UserPayload } from "../../types/user";
 import { api } from "./api";
 import { handleSuccess, handleError, ApiResponse } from "./common";
 
-type GetUsersParams = {
-    searchParams?: FilterObject[],
-    pagination?: { page: number; take: number }
-}
-
-export const getUsers = async (usersParams: GetUsersParams): Promise<ApiResponse<PaginationObject<User> | User[]>> => {
+export const getUsers = async (usersParams: FetchParams): Promise<ApiResponse<PaginationObject<User> | User[]>> => {
     try {
         await new Promise((resolve) => {
             setTimeout(resolve, 2000);
@@ -30,10 +25,10 @@ export const getUsers = async (usersParams: GetUsersParams): Promise<ApiResponse
     }
 };
 
-export const deleteUser = async (id: string): Promise<ApiResponse<any>> => {
+export const deleteUser = async (_id: string): Promise<ApiResponse<any>> => {
     try {
         await new Promise((resolve) => { setTimeout(resolve, 4000) });
-        const response = await api.delete(`/user/${id}`);
+        const response = await api.delete(`/user/${_id}`);
         return handleSuccess(response.data, 'User deleted successfully');
     } catch (err) {
         const defaultMessage = "Unable to delete user due to some internal reasons, please try again later";

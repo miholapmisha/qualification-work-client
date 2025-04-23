@@ -1,5 +1,5 @@
 import { useCallback } from "react"
-import { QuestionState, QuestionType } from "../../../../types/survey"
+import { GeneralQuestionType, QuestionType } from "../../../../types/survey"
 import OptionItem from "../question-form/OptionItem"
 import UncheckedRadioIcon from "../../../../components/common/icons/UncheckedRadioIcon"
 import UncheckedCheckboxIcon from "../../../../components/common/icons/UncheckedCheckboxIcon"
@@ -7,7 +7,7 @@ import { TextAnswerOption } from "../question-form/TextAnswerOption"
 import InactiveOptionsGrid from "./InactiveOptionsGrid"
 
 type InactiveQuestionRendererProps = {
-    question: QuestionState,
+    question: GeneralQuestionType,
     onSetEditable: (editQuestionId: string) => void
 }
 

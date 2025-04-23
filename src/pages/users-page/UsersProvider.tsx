@@ -3,13 +3,14 @@ import { useUsers } from "../../hooks/useUsers"
 import { User, UserPayload } from "../../types/user"
 import { ApiResponse } from "../../services/api/common"
 import { useSearchParams } from "react-router-dom"
+import { NetworkError } from "../../types/error"
 
 type UsersContextType = {
     fetchingUsers: boolean,
     users: User[] | undefined,
-    error: boolean | undefined,
+    error: NetworkError | undefined,
     message: string | undefined,
-    proceedingUsers: string[],
+    proceedingUsersIds: string[],
     createUser: (userData: UserPayload) => Promise<ApiResponse<User | undefined>>,
     deleteUser: (userId: string) => Promise<ApiResponse<any>>,
     updateUser: (user: { _id: string, userData: UserPayload }) => Promise<ApiResponse<any>>
@@ -22,7 +23,7 @@ const UsersContext = createContext<UsersContextType>({
     users: undefined,
     error: undefined,
     message: undefined,
-    proceedingUsers: [],
+    proceedingUsersIds: [],
     createUser: async (userData: UserPayload) => {
         return { data: { message: '', payload: undefined }, error: false } as ApiResponse<any>
     },
@@ -36,18 +37,21 @@ const UsersContext = createContext<UsersContextType>({
 
 const UsersProvider = ({ children }: UsersProviderProps) => {
     const [searchParams] = useSearchParams()
-    const page = searchParams.get('page') || 1
+    const page = Number(searchParams.get('page')) || 1
 
     const {
         fetchingUsers,
         users,
         error,
         message,
-        proceedingUsers,
+        proceedingUsersIds,
         createUser,
         deleteUser,
         updateUser
-    } = useUsers({ fetchParams: { page }, queryKey: ['users', page] })
+    } = useUsers({
+        queryKey: ['users', page],
+        fetchParams: { pagination: { page, take: 10 } }
+    })
 
     return (
         <UsersContext.Provider value={{
@@ -55,7 +59,7 @@ const UsersProvider = ({ children }: UsersProviderProps) => {
             users,
             error,
             message,
-            proceedingUsers,
+            proceedingUsersIds,
             createUser,
             deleteUser,
             updateUser

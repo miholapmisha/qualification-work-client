@@ -3,7 +3,7 @@ import { createCategories, deleteCategory, fetchCategories, updateCategory } fro
 import { ApiResponse } from "../services/api/common";
 import { Category } from "../types/category";
 import { useState } from "react";
-import { defaultPathSeparator } from "../pages/system-page/common";
+import { defaultPathSeparator } from "../pages/system-pages/common";
 import { getParentId, isDescendant } from "../util/category";
 import { NetworkError } from "../types/error";
 

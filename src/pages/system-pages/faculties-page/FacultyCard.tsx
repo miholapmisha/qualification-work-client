@@ -1,10 +1,11 @@
 import { useState } from "react"
 import Button from "../../../components/common/Button"
-import DetailsIcon from "../../../components/common/icons/DetailsIcon"
 import PenIcon from "../../../components/common/icons/PenIcon"
 import { Category } from "../../../types/category"
 import FacultyForm from "./FacultyForm"
-import { useLocation, useNavigate } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
+import DetailsIcon from "../../../components/common/icons/DetailsIcon"
+import Tooltip from "../../../components/common/Tooltip"
 
 type FacultyCardProps = {
     faculty: Category,
@@ -16,7 +17,6 @@ type FacultyCardProps = {
 const FacultyCard = ({ faculty, onEdit, onDelete }: FacultyCardProps) => {
 
     const [edit, setEdit] = useState(false)
-    const navigate = useNavigate()
     const { pathname } = useLocation()
 
     const handleUpdateFaculty = (facultyData: Category) => {
@@ -35,12 +35,15 @@ const FacultyCard = ({ faculty, onEdit, onDelete }: FacultyCardProps) => {
             </div>
             <div className="flex justify-between items-center">
                 <PenIcon onClick={() => setEdit(true)} width={'16px'} height={'16px'} className="cursor-pointer " />
-                {/* <DetailsIcon onClick={() => navigate(pathname + `/specialties/?facultyId=${faculty._id}`)} width={"18px"} height={"18px"} className="my-3 transition-all scale-110 ease-out duration-300 cursor-pointer hover:fill-cyan-900" /> */}
                 <div className="flex">
                     <Button onClick={() => onDelete(faculty._id)} className="hover:underline transition-all ease-out duration-30 cursor-pointer rounded px-4 py-2 text-red-600">Delete</Button>
-                    <Button onClick={() => navigate(pathname + `/specialties/?facultyId=${faculty._id}`)} className="transition-all ease-out duration-300 cursor-pointer flex items-baseline space-x-2 bg-primary-200 py-2 rounded px-4 hover:bg-primary-300">
-                        <span>Details</span>
-                    </Button>
+                    <Link className="font-main" to={pathname + `/specialties/?facultyId=${faculty._id}`}>
+                        <Tooltip text="view specialties" position="bottom">
+                            <button className="transition-all ease-out duration-300 cursor-pointer flex items-center space-x-2 bg-primary-200 py-2 rounded px-4 hover:bg-primary-300">
+                                <DetailsIcon width={"16px"} height={"16px"} />
+                            </button>
+                        </Tooltip>
+                    </Link>
                 </div>
             </div>
         </div>

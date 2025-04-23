@@ -1,14 +1,14 @@
 import { ChangeEvent, useEffect, useState } from "react"
-import { TextQuestion, SingleChoiceQuestion, MultipleChoiceQuestion, CheckboxGrid, MultipleChoiceGrid, QuestionType, QuestionState, Option, TableRow } from "../../../../types/survey"
+import { TextQuestion, SingleChoiceQuestion, MultipleChoiceQuestion, CheckboxGrid, MultipleChoiceGrid, QuestionType, GeneralQuestionType, Option, TableRow } from "../../../../types/survey"
 import QuestionControls from "./QuestionControls"
 import QuestionOptionsRenderer from "./QuestionOptionRenderer"
 import QuestionTypeSelector from "./QuestionTypeSelector"
 
 type QuestionFormProps = {
-    question: QuestionState;
-    onQuestionChange: (question: QuestionState) => void;
+    question: GeneralQuestionType;
+    onQuestionChange: (question: GeneralQuestionType) => void;
     onQuestionDelete: (questionId: string) => void;
-    onQuestionCopy: (question: QuestionState) => void;
+    onQuestionCopy: (question: GeneralQuestionType) => void;
 }
 
 const QuestionForm = ({ question, onQuestionChange, onQuestionDelete, onQuestionCopy }: QuestionFormProps) => {

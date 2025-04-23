@@ -2,23 +2,19 @@ import UsersTable from "./users-table/UsersTable"
 import Loader from "../../components/common/Loader";
 import Pagination from "../../components/common/Pagination";
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { useUsers } from "../../hooks/useUsers";
 import UserFormModal from "./UserFormModal";
-import Button from "../../components/common/Button";
 import { User, UserPayload } from "../../types/user";
 
 const defaultPage = 1;
-const defaultItemsPerPage = 10;
+const defaultItemsPerPage = 2;
 
 const UsersPage = () => {
 
-    const { search } = useLocation()
-    const [totalPages, setTotalPages] = useState(0)
-    const [page, setPage] = useState(() => {
-        const pageParam = Number(new URLSearchParams(search).get('page'))
-        return isNaN(pageParam) || pageParam == 0 ? defaultPage : pageParam
-    });
+    const [searchParams] = useSearchParams();
+    const [totalPages, setTotalPages] = useState(0);
+    const page = Number(searchParams.get('page')) || defaultPage;
 
     const [editableUser, setEditableUser] = useState<null | undefined | User>(null)
 
@@ -84,7 +80,7 @@ const UsersPage = () => {
                     </>
                 }
 
-                {totalPages > 0 && <Pagination selectedPage={page} setSelectedPage={(page) => setPage(page)} totalPages={totalPages} />}
+                {totalPages > 0 && <Pagination totalPages={totalPages} />}
             </div>
 
             {editableUser !== null &&

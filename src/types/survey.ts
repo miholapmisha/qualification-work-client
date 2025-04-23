@@ -2,10 +2,20 @@ export type Survey = {
     _id: string,
     title: string,
     description?: string,
-    questions: QuestionState[],
+    questions: GeneralQuestionType[],
+    createdAt: Date,
+    authorId: string,
+    assigned?: boolean,
 }
 
-export type QuestionState = TextQuestion | SingleChoiceQuestion | MultipleChoiceQuestion | CheckboxGrid | MultipleChoiceGrid
+export type SurveyPayload = {
+    title: string,
+    description?: string,
+    questions: GeneralQuestionType[],
+    authorId: string
+}
+
+export type GeneralQuestionType = TextQuestion | SingleChoiceQuestion | MultipleChoiceQuestion | CheckboxGrid | MultipleChoiceGrid
 
 export enum QuestionType {
     MULTIPLE_CHOICE = 'multiple_choice',

@@ -1,6 +1,6 @@
 import Button from "../../../components/common/Button"
 import Loader from "../../../components/common/Loader"
-import { useCallback, useState } from "react"
+import { useMemo, useState } from "react"
 import AddSpecialtyModal, { SpecialtyCreationData } from "./AddSpecialtyModal"
 import CategoryNode from "./CategoryNode"
 import { Category, CategoryType } from "../../../types/category"
@@ -10,7 +10,8 @@ import { useSpecialties } from "./SpecialtyProvider"
 
 const SpecialtiesPage = () => {
     const [openAddSpecialtyModal, setOpenAddSpecialtyModal] = useState(false);
-
+    
+    
     const {
         parentIdsCreatingCategories,
         fetchingCategories: loadingSpecialties,
@@ -59,7 +60,7 @@ const SpecialtiesPage = () => {
         await createCategories(categories);
     };
 
-    const treeCategories = useCallback(() => {
+    const treeCategories = useMemo(() => {
         return buildCategoryTree(specialties, defaultPathSeparator)
     }, [specialties])
 
@@ -87,7 +88,7 @@ const SpecialtiesPage = () => {
                         no specialties for faculty
                     </h1>}
                     <div className="">
-                        {treeCategories && treeCategories()?.length > 0 && treeCategories().map((specialty) =>
+                        {treeCategories && treeCategories?.length > 0 && treeCategories.map((specialty) =>
                             <CategoryNode category={specialty} key={specialty._id} initial={true} />)}
                     </div>
 
