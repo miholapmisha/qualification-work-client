@@ -1,4 +1,4 @@
-import { GeneralQuestionType, QuestionType } from "../../../../types/survey"
+import { GeneralQuestionType, QuestionType } from "../../../../../types/survey"
 import CheckboxGridRenderer from "./CheckboxGridRenderer"
 import MultipleChoiceGridRenderer from "./MultipleChoiceGridRenderer"
 import MultipleChoiceRenderer from "./MultipleChoiceRenderer"

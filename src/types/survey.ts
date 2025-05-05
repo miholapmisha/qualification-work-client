@@ -1,3 +1,8 @@
+export enum SurveyStatus {
+    IN_PROGRESS = 'in_progress',
+    PUBLISHED = 'published',
+}
+
 export type Survey = {
     _id: string,
     title: string,
@@ -5,7 +10,7 @@ export type Survey = {
     questions: GeneralQuestionType[],
     createdAt: Date,
     authorId: string,
-    assigned?: boolean,
+    status: SurveyStatus,
 }
 
 export type SurveyPayload = {

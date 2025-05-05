@@ -87,7 +87,7 @@ const SpecialtiesPage = () => {
                     {specialties?.length <= 0 && <h1 className="w-full h-full flex items-center justify-center text-center text-primary-300 text-4xl lowercase font-secondary">
                         no specialties for faculty
                     </h1>}
-                    <div className="">
+                    <div className="space-y-1">
                         {treeCategories && treeCategories?.length > 0 && treeCategories.map((specialty) =>
                             <CategoryNode category={specialty} key={specialty._id} initial={true} />)}
                     </div>

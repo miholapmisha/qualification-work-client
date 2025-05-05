@@ -34,7 +34,6 @@ const PageLayout = () => {
         }
     ]
     const defaultOptions = getSidebarOptions(currentUser?.roles ?? [])
-
     return (
         <div className="flex w-full max-h-screen space-x-2 py-2 pr-2">
             <NavigationSidebar defaultOptions={defaultOptions} preferenceOptions={preferenceOptions} />

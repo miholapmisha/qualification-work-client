@@ -8,12 +8,14 @@ import Pagination from "../../../components/common/Pagination";
 import { useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../../components/AuthProvider";
+import { Survey } from "../../../types/survey";
 
 type AllSurveysTabProps = {
     debouncedSearchQuery: string;
+    onClickAssign: (survey: Survey) => void
 }
 
-const AllSurveysTab = ({ debouncedSearchQuery }: AllSurveysTabProps) => {
+const AllSurveysTab = ({ debouncedSearchQuery, onClickAssign }: AllSurveysTabProps) => {
 
     const { currentUser } = useAuth();
     const [searchParams] = useSearchParams();
@@ -75,7 +77,7 @@ const AllSurveysTab = ({ debouncedSearchQuery }: AllSurveysTabProps) => {
         <div className="h-full flex flex-col justify-between">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                 {usersSurveys.map(survey => (
-                    <SurveyCard key={survey._id} survey={survey} isOwner={currentUser?._id === survey.authorId} />
+                    <SurveyCard onClickAssign={onClickAssign} key={survey._id} survey={survey} isOwner={currentUser?._id === survey.authorId} />
                 ))}
             </div>
             <div className="mt-auto flex justify-center">

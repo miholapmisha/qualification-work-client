@@ -1,4 +1,4 @@
-import { SingleChoiceQuestion } from "../../../../types/survey";
+import { SingleChoiceQuestion } from "../../../../../types/survey";
 import Radio from "../Radio";
 import ClearAnswerButton from "./ClearAnswerButton";
 

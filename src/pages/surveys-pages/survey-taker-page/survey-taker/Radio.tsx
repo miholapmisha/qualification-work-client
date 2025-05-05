@@ -1,6 +1,6 @@
 import React from 'react';
-import UncheckedRadioIcon from '../../../components/common/icons/UncheckedRadioIcon';
-import CheckedRadioIcon from '../../../components/common/icons/CheckedRadioIcon';
+import UncheckedRadioIcon from '../../../../components/common/icons/UncheckedRadioIcon';
+import CheckedRadioIcon from '../../../../components/common/icons/CheckedRadioIcon';
 
 type CustomRadioProps = {
     name: string;

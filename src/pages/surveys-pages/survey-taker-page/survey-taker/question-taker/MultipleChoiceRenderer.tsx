@@ -1,4 +1,4 @@
-import { MultipleChoiceQuestion } from "../../../../types/survey";
+import { MultipleChoiceQuestion } from "../../../../../types/survey";
 import Checkbox from "../Checkbox";
 import ClearAnswerButton from "./ClearAnswerButton";
 

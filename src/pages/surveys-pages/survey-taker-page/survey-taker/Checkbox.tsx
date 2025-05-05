@@ -1,6 +1,6 @@
 import React from 'react';
-import UncheckedCheckboxIcon from '../../../components/common/icons/UncheckedCheckboxIcon';
-import CheckedCheckboxIcon from '../../../components/common/icons/CheckedCheckboxIcon';
+import UncheckedCheckboxIcon from '../../../../components/common/icons/UncheckedCheckboxIcon';
+import CheckedCheckboxIcon from '../../../../components/common/icons/CheckedCheckboxIcon';
 
 type CustomCheckboxProps = {
     name: string;

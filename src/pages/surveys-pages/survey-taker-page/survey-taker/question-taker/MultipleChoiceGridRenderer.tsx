@@ -1,5 +1,5 @@
 import React from "react";
-import { MultipleChoiceGrid, MultipleChoiceGridAnswer } from "../../../../types/survey";
+import { MultipleChoiceGrid, MultipleChoiceGridAnswer } from "../../../../../types/survey";
 import Radio from "../Radio";
 import ClearAnswerButton from "./ClearAnswerButton";
 

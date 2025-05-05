@@ -75,3 +75,17 @@ export const deleteSurvey = async (surveyId: string): Promise<ApiResponse<any>> 
         return handleError(err, defaultMessage);
     }
 }
+
+export const categoriesAssignSurvey = async (survey: Survey, assignCategoriesIds: string[]): Promise<ApiResponse<any>> => {
+    try {
+        console.log("Survey: ", survey)
+        await new Promise((resolve) => {
+            setTimeout(resolve, 2000);
+        });
+        const response = await api.post('/survey/assign/categories', { survey, assignCategoriesIds });
+        return handleSuccess(response.data, 'Survey assigned successfully');
+    } catch (err) {
+        const defaultMessage = "Unable to assign survey due to some internal reasons, please try again later";
+        return handleError(err, defaultMessage);
+    }
+}

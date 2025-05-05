@@ -1,4 +1,4 @@
-import { TextQuestion } from "../../../../types/survey";
+import { TextQuestion } from "../../../../../types/survey";
 import ClearAnswerButton from "./ClearAnswerButton";
 
 type TextQuestionRendererProps = {

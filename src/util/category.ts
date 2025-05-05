@@ -32,6 +32,51 @@ export const buildCategoryTree = (categories: Category[], pathSeparator: string 
     return rootCategories;
 }
 
+export const flattenCategoryTree = (treeCategories: TreeCategory[], pathSeparator: string = '.'): Category[] => {
+    const result: Category[] = [];
+
+    const processNode = (node: TreeCategory, parentPath: string = '') => {
+        const category: Category = {
+            _id: node._id,
+            name: node.name,
+            categoryType: node.categoryType,
+            path: parentPath,
+        };
+
+        result.push(category);
+
+        const newParentPath = parentPath ?
+            `${parentPath}${pathSeparator}${node._id}` :
+            node._id;
+
+        node.children.forEach(child => {
+            processNode(child, newParentPath);
+        });
+    };
+
+    treeCategories.forEach(rootNode => {
+        processNode(rootNode);
+    });
+
+    return result;
+};
+
+export const getAllDescendantIds = (categoryId: string, categories: Category[]): string[] => {
+    const result: string[] = [];
+
+    const children = categories.filter(cat => {
+        const pathParts = cat.path.split('.');
+        return pathParts[pathParts.length - 1] === categoryId;
+    });
+
+    children.forEach(child => {
+        result.push(child._id);
+        result.push(...getAllDescendantIds(child._id, categories));
+    });
+
+    return result;
+};
+
 export const getParentId = (category: Category, pathSeparator: string) => {
     const pathParts = category.path.split(pathSeparator);
     return pathParts[pathParts.length - 1];

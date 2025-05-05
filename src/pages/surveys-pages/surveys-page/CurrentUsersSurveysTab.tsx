@@ -9,12 +9,14 @@ import SurveyCard from "./SurveyCard";
 import { useEffect, useState } from "react";
 import Pagination from "../../../components/common/Pagination";
 import { useAuth } from "../../../components/AuthProvider";
+import { Survey } from "../../../types/survey";
 
 type CurrentUsersSurveysTabProps = {
     debouncedSearchQuery: string;
+    onClickAssign: (survey: Survey) => void
 }
 
-const CurrentUsersSurveysTab = ({ debouncedSearchQuery }: CurrentUsersSurveysTabProps) => {
+const CurrentUsersSurveysTab = ({ debouncedSearchQuery, onClickAssign }: CurrentUsersSurveysTabProps) => {
 
     const [searchParams] = useSearchParams();
     const [totalPages, setTotalPages] = useState(0);
@@ -39,7 +41,7 @@ const CurrentUsersSurveysTab = ({ debouncedSearchQuery }: CurrentUsersSurveysTab
     const currentUsersSurveys = Array.isArray(currentUserSurveysResponse?.data?.payload)
         ? currentUserSurveysResponse?.data?.payload
         : currentUserSurveysResponse?.data?.payload?.data;
-
+    console.log("Current users surveys: ", currentUsersSurveys)
     const paginationData = !Array.isArray(currentUserSurveysResponse?.data?.payload)
         ? currentUserSurveysResponse?.data?.payload?.metaData
         : undefined
@@ -83,7 +85,7 @@ const CurrentUsersSurveysTab = ({ debouncedSearchQuery }: CurrentUsersSurveysTab
         <div className="h-full flex flex-col justify-between">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                 {currentUsersSurveys.map(survey => (
-                    <SurveyCard key={survey._id} survey={survey} isOwner={true} />
+                    <SurveyCard onClickAssign={onClickAssign} key={survey._id} survey={survey} isOwner={true} />
                 ))}
             </div>
             <div className="mt-auto flex justify-center">

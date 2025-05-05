@@ -1,5 +1,5 @@
 import React from "react";
-import { CheckboxGrid, CheckboxGridAnswer } from "../../../../types/survey";
+import { CheckboxGrid, CheckboxGridAnswer } from "../../../../../types/survey";
 import Checkbox from "../Checkbox";
 
 type CheckboxGridRendererProps = {

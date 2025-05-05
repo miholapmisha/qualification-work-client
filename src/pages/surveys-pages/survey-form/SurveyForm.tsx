@@ -158,7 +158,7 @@ const SurveyForm = ({ surveyData, onSave }: SurveyFormProps) => {
 
                     <div className="space-y-2">
                         {surveyState.description !== undefined ? (
-                            <div className="space-y-2">
+                            <div className="space-y-2 max-w-full">
                                 <h2 className="text-gray-700 font-medium">Description</h2>
                                 {editDescription || surveyState.description === '' ? (
                                     <EditDescriptionArea

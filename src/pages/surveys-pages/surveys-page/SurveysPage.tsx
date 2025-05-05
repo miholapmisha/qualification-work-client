@@ -7,9 +7,12 @@ import { useDebounce } from '../../../hooks/useDebounce';
 import { Link, useSearchParams } from 'react-router-dom';
 import CurrentUsersSurveysTab from './CurrentUsersSurveysTab';
 import AllSurveysTab from './AllSurveysTab';
+import AssignSurveyModal from './AssignSurveyModal';
+import { Survey } from '../../../types/survey';
 
 const SurveyPage = () => {
 
+    const [surveyToAssign, setSurveyToAssign] = useState<Survey | null>(null);
     const [searchParams, setSearchParams] = useSearchParams();
     const surveyType = searchParams.get('type');
 
@@ -43,9 +46,12 @@ const SurveyPage = () => {
         })
     }
 
+    const handleSurveyAssign = (survey: Survey) => {
+        setSurveyToAssign(survey);
+    }
+
     return (
         <div className="flex-auto rounded-2xl bg-primary-50 overflow-y-auto p-16 space-y-10 flex flex-col">
-            {/* Header */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
                     <h1 className="text-2xl md:text-3xl font-bold font-secondary text-primary-900">Surveys</h1>
@@ -94,18 +100,24 @@ const SurveyPage = () => {
                 </button>
             </div>
 
-            {/* Tab Content */}
             <div className='flex-grow'>
                 {surveyType === 'my' ? (
                     <CurrentUsersSurveysTab
+                        onClickAssign={handleSurveyAssign}
                         debouncedSearchQuery={debouncedSearchQuery}
                     />
                 ) : (
                     <AllSurveysTab
+                        onClickAssign={handleSurveyAssign}
                         debouncedSearchQuery={debouncedSearchQuery}
                     />
                 )}
             </div>
+            {surveyToAssign && <AssignSurveyModal
+                onClose={() => setSurveyToAssign(null)}
+                isOpen={surveyToAssign !== null}
+                surveyToAssign={surveyToAssign}
+            />}
         </div>
     );
 };

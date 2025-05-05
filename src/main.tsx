@@ -12,12 +12,14 @@ import AlertsProvider from './components/alert/AlertsProvider'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import AlertListener, { createAlertEvent } from './components/alert/AlertListener'
 import { ApiResponse } from './services/api/common'
+import { studentsRoutes } from './routes/student'
 
 const router = createBrowserRouter([
   ...fallbackRoute,
   ...publicRoutes,
   ...adminRoutes,
-  ...teacherRoutes
+  ...teacherRoutes,
+  ...studentsRoutes
 ])
 
 const queryClient = new QueryClient({

@@ -9,21 +9,23 @@ import ConfirmationModal from "../../../components/common/ConfirmationModal";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteSurvey } from "../../../services/api/surveys";
 import { useAlerts } from "../../../components/alert/AlertsProvider";
+import Button from "../../../components/common/Button";
+import { formatDate } from "../../../util/date";
 
 
 type SurveyCartProps = {
     isOwner: boolean
     survey: Survey
     onDelete?: (surveyId: string) => void
+    onClickAssign: (survey: Survey) => void
 }
 
-const SurveyCard = ({ survey, isOwner }: SurveyCartProps) => {
+const SurveyCard = ({ survey, isOwner, onClickAssign }: SurveyCartProps) => {
     const navigate = useNavigate();
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const queryClient = useQueryClient();
     const { addAlert } = useAlerts();
-
-    const canModify = isOwner && !survey.assigned;
+    const canModify = isOwner && survey.status === 'in_progress';
 
     const { mutateAsync: deleteSurveyMutation } = useMutation({
         mutationFn: (surveyId: string) => deleteSurvey(surveyId),
@@ -34,15 +36,6 @@ const SurveyCard = ({ survey, isOwner }: SurveyCartProps) => {
             }
         },
     })
-
-    const formatDate = (dateString: string | Date) => {
-        const date = typeof dateString === 'string' ? new Date(dateString) : dateString;
-        return date.toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric',
-        });
-    };
 
     const handleEditClick = (e: React.MouseEvent) => {
         e.stopPropagation();
@@ -62,30 +55,31 @@ const SurveyCard = ({ survey, isOwner }: SurveyCartProps) => {
     return (
         <>
             <div
-                className="border-1 border-primary-300 hover:scale-102 bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-200 flex flex-col h-full"
+                className="border-1 border-primary-300 bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-200 flex flex-col max-h-[424px] h-full"
             >
                 <div className="flex justify-between items-start mb-3">
                     <h3 className="text-lg font-bold text-primary-900 font-secondary">{survey.title}</h3>
+
                     {isOwner &&
-                        <span className={`px-3 py-1 rounded-full text-xs ${isOwner ? 'bg-cyan-200 text-cyan-800' : 'bg-gray-100 text-gray-700'}`}>
-                            Mine
-                        </span>
+                        <div className="space-x-2">
+                            <span className={`px-3 py-1 rounded-full text-xs ${isOwner ? 'bg-cyan-200 text-cyan-800' : 'bg-gray-100 text-gray-700'}`}>
+                                Mine
+                            </span>
+                        </div>
                     }
                 </div>
                 <p className="text-primary-600 text-sm mb-4 flex-grow">{survey.description}</p>
                 <div className="border-t border-primary-200 pt-4 mt-2">
-                    <div className="flex justify-between text-sm text-primary-500">
+                    <div className="flex justify-between items-center text-sm text-primary-500">
                         <div className="flex items-center space-x-4">
                             <span>{survey.questions.length ? survey.questions.length : 0} questions</span>
 
-                            {/* Status indicator if survey is assigned */}
-                            {survey.assigned && (
+                            {survey.status === 'published' && (
                                 <span className="px-2 py-1 bg-green-100 text-green-800 rounded-md text-xs">
                                     Assigned
                                 </span>
                             )}
 
-                            {/* Survey actions */}
                             <div className="flex space-x-3">
                                 <Tooltip text='Use as template'>
                                     <CopyIcon
@@ -99,7 +93,6 @@ const SurveyCard = ({ survey, isOwner }: SurveyCartProps) => {
                                     />
                                 </Tooltip>
 
-                                {/* Edit button - only for owner and unassigned surveys */}
                                 {canModify && (
                                     <Tooltip text='Edit survey'>
                                         <PenIcon
@@ -111,7 +104,6 @@ const SurveyCard = ({ survey, isOwner }: SurveyCartProps) => {
                                     </Tooltip>
                                 )}
 
-                                {/* Delete button - only for owner and unassigned surveys */}
                                 {canModify && (
                                     <Tooltip text='Delete survey'>
                                         <TrashIcon
@@ -124,7 +116,15 @@ const SurveyCard = ({ survey, isOwner }: SurveyCartProps) => {
                                 )}
                             </div>
                         </div>
-                        <span>{formatDate(survey.createdAt)}</span>
+                        <div className="space-x-4">
+                            {isOwner && survey.status !== 'published' && (
+                                <Button onClick={() => onClickAssign(survey)} classes={`hover:scale-105 transition-all hover:bg-primary-400 cursor-pointer px-3 py-1 text-xs bg-primary-300'}`}>
+                                    Assign
+                                </Button>
+                            )}
+
+                            <span>{formatDate(survey.createdAt)}</span>
+                        </div>
                     </div>
                 </div>
             </div>
