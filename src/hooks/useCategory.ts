@@ -5,7 +5,6 @@ import { Category } from "../types/category";
 import { useState } from "react";
 import { defaultPathSeparator } from "../pages/system-pages/common";
 import { getParentId, isDescendant } from "../util/category";
-import { NetworkError } from "../types/error";
 
 type useCategoryProps = {
     queryKey: any[];
@@ -17,17 +16,9 @@ export const useCategory = ({ queryKey, fetchParams, enabled }: useCategoryProps
     const queryClient = useQueryClient();
     const [proceedingCategoriesIds, setProceedingCategoriesIds] = useState<string[]>([]);
     const [parentIdsCreatingCategories, setParentIdsCreatingCategories] = useState<string[]>([]);
-    const [lastErrorMessage, setLastErrorMessage] = useState<NetworkError | undefined>(undefined);
 
     const { data: response, isLoading: fetchingCategories } = useQuery({
-        queryFn: async () => {
-            const response = await fetchCategories(fetchParams)
-            if (response.error) {
-                setLastErrorMessage({ id: crypto.randomUUID(), message: response.data.message })
-            }
-
-            return response
-        },
+        queryFn: async () => fetchCategories(fetchParams),
         queryKey,
         enabled
     });
@@ -48,9 +39,7 @@ export const useCategory = ({ queryKey, fetchParams, enabled }: useCategoryProps
                 return prevIds.filter((id) => !parentIds.includes(id));
             });
 
-            if (response?.error) {
-                setLastErrorMessage({ message: response.data.message, id: crypto.randomUUID() });
-            } else {
+            if (!response?.error) {
                 queryClient.setQueryData(queryKey, (oldData: ApiResponse<Category[] | undefined>) => {
                     if (!response?.error && response?.data.payload && oldData?.data?.payload) {
                         return {
@@ -77,9 +66,7 @@ export const useCategory = ({ queryKey, fetchParams, enabled }: useCategoryProps
             const deletionId = context;
             setProceedingCategoriesIds((prevIds) => prevIds.filter((id) => id !== deletionId));
 
-            if (response?.error) {
-                setLastErrorMessage({ message: response.data.message, id: crypto.randomUUID() });
-            } else {
+            if (!response?.error) {
                 queryClient.setQueryData(queryKey, (oldData: ApiResponse<Category[] | undefined>) => {
                     if (!response?.error && oldData?.data?.payload) {
                         return {
@@ -110,9 +97,7 @@ export const useCategory = ({ queryKey, fetchParams, enabled }: useCategoryProps
             const editionId = context._id;
             setProceedingCategoriesIds((prevIds) => prevIds.filter((id) => id !== editionId));
 
-            if (response?.error) {
-                setLastErrorMessage({ message: response.data.message, id: crypto.randomUUID() });
-            } else {
+            if (!response?.error) {
                 queryClient.setQueryData(queryKey, (oldData: ApiResponse<Category[] | undefined>) => {
                     if (!response?.error && oldData?.data?.payload) {
                         const updatedCategories = [...oldData.data.payload];
@@ -139,7 +124,6 @@ export const useCategory = ({ queryKey, fetchParams, enabled }: useCategoryProps
     return {
         fetchingCategories,
         categories: response?.data?.payload,
-        error: lastErrorMessage,
         message: response?.data?.message,
         parentIdsCreatingCategories,
         proceedingCategoriesIds,

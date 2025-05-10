@@ -7,9 +7,6 @@ export type AssignId = {
 
 export type Assign = {
     assignedAt: Date
-    survey: Survey
-}
-
-export type AssingPayload = {
-    survey: Survey
+    survey: Survey,
+    answers: number
 }

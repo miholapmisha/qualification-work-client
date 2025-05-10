@@ -26,7 +26,7 @@ const FacultyForm = ({ onSaveFaculty, onCancel, defaultFaculty }: FacultyProps) 
     const saveDisabled = !faculty.name.trim();
 
     return (
-        <div className="scale-105 border-1 border-primary-400 w-full max-w-[456px] min-h-[128px] px-6 py-4 rounded-xl flex flex-col justify-between">
+        <div className="scale-105 border-1 border-primary-400 w-full min-h-[128px] px-6 py-4 rounded-xl flex flex-col justify-between">
             <div className="w-full max-h-[60px] text-lg">
                 <textarea value={faculty.name} onChange={handleInputChange} ref={textAreaRef} placeholder="Write a name" className="outline-none 
                                                                                                                                     border-primary-400 

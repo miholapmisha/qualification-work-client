@@ -1,10 +1,10 @@
-import { useCallback, useState } from "react"
+import { useMemo, useState } from "react"
 import Button from "../../../components/common/Button"
-import { Category, CategoryType } from "../../../types/category"
+import { CategoryType } from "../../../types/category"
 import FacultyCard from "./FacultyCard"
 import FacultyForm from "./FacultyForm"
 import Loader from "../../../components/common/Loader"
-import LoaderCard from "./LoaderFacultyCard"
+import LoaderCard from "../../../components/LoaderCard"
 import { useCategory } from "../../../hooks/useCategory"
 
 export const FacultiesPage = () => {
@@ -22,7 +22,7 @@ export const FacultiesPage = () => {
     } = useCategory({ fetchParams: { categoryType: CategoryType.FACULTY }, queryKey: ['faculties'] })
     const showMessageNoFacultiesYet = faculties && faculties?.length <= 0 && !showAddFacultyForm && !fetchingFaculties
 
-    const renderFaculties = useCallback((faculties: Category[]) => {
+    const renderFaculties = useMemo(() => {
 
         if (!faculties || fetchingFaculties)
             return null
@@ -51,7 +51,7 @@ export const FacultiesPage = () => {
                         </div>}
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 3xl:grid-cols-4 gap-x-8 gap-y-8">
 
-                            {renderFaculties(faculties || [])}
+                            {renderFaculties}
 
                             {creatingFacultyCount > 0 && Array.from({ length: creatingFacultyCount }).map((_, index) => <LoaderCard key={index} />)}
 

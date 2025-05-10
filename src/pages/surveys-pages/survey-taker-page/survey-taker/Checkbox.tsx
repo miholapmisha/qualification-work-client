@@ -50,7 +50,6 @@ const Checkbox = ({
                 )}
             </div>
 
-            {/* Optional label */}
             {label && (
                 <span className={`text-sm ${checked ? 'font-medium' : 'font-normal'}`}>
                     {label}

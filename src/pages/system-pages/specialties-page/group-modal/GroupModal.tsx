@@ -118,7 +118,6 @@ const GroupModal = ({ isOpen, onClose, groupId }: GroupModalProps) => {
         <Modal isOpen={isOpen} onClose={onClose}>
             <div className="min-w-[768px] w-[768px]">
                 <div className="p-6">
-                    {/* Header with Title and Tabs */}
                     <div className="mb-6">
                         <h2 className="text-xl font-semibold text-primary-800 mb-4">Manage Group Users</h2>
 

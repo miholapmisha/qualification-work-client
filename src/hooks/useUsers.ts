@@ -3,7 +3,6 @@ import { createUser, deleteUser, getUsers, updateUser } from "../services/api/us
 import { useState } from "react";
 import { User, UserPayload } from "../types/user";
 import { ApiResponse } from "../services/api/common";
-import { NetworkError } from "../types/error";
 import { FilterObject } from "../types/filtering";
 
 type useUsersProps = {
@@ -14,43 +13,17 @@ type useUsersProps = {
 export const useUsers = ({ queryKey, fetchParams }: useUsersProps) => {
     const queryClient = useQueryClient();
     const [proceedingUsersIds, setProceedingUsersIds] = useState<string[]>([]);
-    //TODO: update logic
-    const [lastErrorMessage, setLastErrorMessage] = useState<NetworkError | undefined>(undefined);
 
     const { data: usersResponse, isFetching: fetchingUsers, isPlaceholderData: isPlaceholderUsers } = useQuery({
-        queryFn: async () => {
-            const response = await getUsers(fetchParams)
-            if (response.error) {
-                setLastErrorMessage({ id: crypto.randomUUID(), message: response.data.message })
-            }
-
-            return response
-        },
+        queryFn: async () => await getUsers(fetchParams),
         queryKey
     });
 
     const { mutateAsync: createUserMutation, isPending: isUserCreating } = useMutation({
         mutationFn: (userData: UserPayload) => createUser(userData),
         onSettled: (response) => {
-            if (response?.error) {
-                setLastErrorMessage({ message: response.data.message, id: crypto.randomUUID() });
-            } else {
-                queryClient.setQueryData(queryKey, (oldData: ApiResponse<any>) => {
-                    if (!response?.error && response?.data.payload && oldData?.data?.payload?.data) {
-                        return {
-                            ...oldData,
-                            data: {
-                                ...oldData.data,
-                                message: response.data.message,
-                                payload: {
-                                    ...oldData.data.payload,
-                                    data: [...oldData.data.payload.data, response.data.payload],
-                                },
-                            },
-                        };
-                    }
-                    return oldData;
-                });
+            if (!response?.error) {
+                queryClient.invalidateQueries({ queryKey })
             }
         },
     });
@@ -64,9 +37,7 @@ export const useUsers = ({ queryKey, fetchParams }: useUsersProps) => {
             const deletionId = context;
             setProceedingUsersIds((prevIds) => prevIds.filter((id) => id !== deletionId));
 
-            if (response?.error) {
-                setLastErrorMessage({ message: response.data.message, id: crypto.randomUUID() });
-            } else {
+            if (!response?.error) {
                 queryClient.setQueryData(queryKey, (oldData: ApiResponse<any>) => {
                     if (!response?.error && oldData?.data?.payload?.data) {
                         return {
@@ -96,9 +67,7 @@ export const useUsers = ({ queryKey, fetchParams }: useUsersProps) => {
             const updateId = context._id;
             setProceedingUsersIds((prevIds) => prevIds.filter((id) => id !== updateId));
 
-            if (response?.error) {
-                setLastErrorMessage({ message: response.data.message, id: crypto.randomUUID() });
-            } else {
+            if (!response?.error) {
                 queryClient.setQueryData(queryKey, (oldData: ApiResponse<any>) => {
                     if (!response?.error && oldData?.data?.payload?.data) {
                         const updatedUsers = [...oldData.data.payload.data];
@@ -126,10 +95,9 @@ export const useUsers = ({ queryKey, fetchParams }: useUsersProps) => {
 
     return {
         fetchingUsers,
-        users: Array.isArray(usersResponse?.data?.payload) 
-            ? usersResponse?.data?.payload 
+        users: Array.isArray(usersResponse?.data?.payload)
+            ? usersResponse?.data?.payload
             : usersResponse?.data?.payload?.data,
-        error: lastErrorMessage,
         message: usersResponse?.data?.message,
         proceedingUsersIds,
         createUser: createUserMutation,
@@ -137,8 +105,8 @@ export const useUsers = ({ queryKey, fetchParams }: useUsersProps) => {
         deleteUser: deleteUserMutation,
         updateUser: updateUserMutation,
         isPlaceholderUsers,
-        paginationData: !Array.isArray(usersResponse?.data?.payload) 
-            ? usersResponse?.data?.payload?.metaData 
+        paginationData: !Array.isArray(usersResponse?.data?.payload)
+            ? usersResponse?.data?.payload?.metaData
             : undefined,
     };
 };

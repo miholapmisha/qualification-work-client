@@ -4,6 +4,8 @@ import SurveyPage from "../pages/surveys-pages/surveys-page/SurveysPage";
 import { Role } from "../types/user";
 import CreateSurveyPage from "../pages/surveys-pages/create-survey-page/CreateSurveyPage";
 import EditSurveyPage from "../pages/surveys-pages/edit-survey-page/EditSurveyPage";
+import AnalyticsPage from "../pages/analytics-page/AnalyticsPage";
+import TextAnswersPage from "../pages/analytics-page/text-answers-page/TextAnswersPage";
 
 export const teacherRoutes = [
     {
@@ -26,6 +28,14 @@ export const teacherRoutes = [
             {
                 path: '/surveys/edit/:surveyId',
                 element: <EditSurveyPage />
+            },
+            {
+                path: '/surveys/analytics/:surveyId',
+                element: <AnalyticsPage />
+            },
+            {
+                path: '/surveys/analytics/text-answers/:surveyId',
+                element: <TextAnswersPage />
             }
         ]
     }

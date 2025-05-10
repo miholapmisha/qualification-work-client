@@ -3,12 +3,10 @@ import { Category } from "../../../types/category"
 import { useCategory } from "../../../hooks/useCategory"
 import { ApiResponse } from "../../../services/api/common"
 import { useSearchParams } from "react-router-dom"
-import { NetworkError } from "../../../types/error"
 
 type SpecialtyContextType = {
     fetchingCategories: boolean,
     categories: Category[] | undefined,
-    error: NetworkError | undefined,
     message: string | undefined,
     proceedingCategoriesIds: string[],
     parentIdsCreatingCategories: string[],
@@ -23,7 +21,6 @@ type SpecialtyProviderProps = PropsWithChildren
 const SpecialtyContext = createContext<SpecialtyContextType>({
     fetchingCategories: false,
     categories: undefined,
-    error: undefined,
     message: undefined,
     proceedingCategoriesIds: [],
     parentIdsCreatingCategories: [],
@@ -46,7 +43,6 @@ const SpecialtyProvider = ({ children }: SpecialtyProviderProps) => {
     const {
         fetchingCategories,
         categories,
-        error,
         message,
         proceedingCategoriesIds,
         parentIdsCreatingCategories,
@@ -59,7 +55,6 @@ const SpecialtyProvider = ({ children }: SpecialtyProviderProps) => {
         <SpecialtyContext.Provider value={{
             fetchingCategories,
             categories,
-            error,
             message,
             proceedingCategoriesIds,
             parentIdsCreatingCategories,

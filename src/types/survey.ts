@@ -39,33 +39,28 @@ export interface BaseQuestion {
 
 export interface TextQuestion extends BaseQuestion {
     type: QuestionType.TEXT
-    answer?: string
 }
 
 export interface SingleChoiceQuestion extends BaseQuestion {
     type: QuestionType.SINGLE_CHOICE
-    options: Option[],
-    answer?: string
+    options: Option[]
 }
 
 export interface MultipleChoiceQuestion extends BaseQuestion {
     type: QuestionType.MULTIPLE_CHOICE
-    options: Option[],
-    answer?: string[]
+    options: Option[]
 }
 
 export interface MultipleChoiceGrid extends BaseQuestion {
     type: QuestionType.MULTIPLE_CHOICE_GRID,
     rows: TableRow[],
-    options: Option[],
-    answer?: MultipleChoiceGridAnswer[]
+    options: Option[]
 }
 
 export interface CheckboxGrid extends BaseQuestion {
     type: QuestionType.CHECKBOX_GRID,
     rows: TableRow[],
-    options: Option[],
-    answer?: CheckboxGridAnswer[]
+    options: Option[]
 }
 
 export type TableColumns = {

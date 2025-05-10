@@ -5,60 +5,49 @@ import FilterIcon from '../../../components/common/icons/FilterIcon';
 import ChevronIcon from '../../../components/common/icons/ChevonIcon';
 import { useDebounce } from '../../../hooks/useDebounce';
 import { Link, useSearchParams } from 'react-router-dom';
-import CurrentUsersSurveysTab from './CurrentUsersSurveysTab';
-import AllSurveysTab from './AllSurveysTab';
+import SurveysTab from './SurveysTab';
 import AssignSurveyModal from './AssignSurveyModal';
 import { Survey } from '../../../types/survey';
 
 const SurveyPage = () => {
-
     const [surveyToAssign, setSurveyToAssign] = useState<Survey | null>(null);
     const [searchParams, setSearchParams] = useSearchParams();
-    const surveyType = searchParams.get('type');
+    const surveyType = searchParams.get('type') || 'my';
 
     const [searchQuery, setSearchQuery] = useState('');
-
     const debouncedSearchQuery = useDebounce({ value: searchQuery, milliseconds: 500 });
 
     useLayoutEffect(() => {
-
-        setSearchParams(prev => {
+        setSearchParams((prev) => {
             const params = new URLSearchParams(prev);
-            if (params.get('page') === null) {
-                params.set('page', '1')
-            }
-
-            if (params.get('type') === null) {
-                params.set('type', 'my')
-            }
-
+            if (!params.get('page')) params.set('page', '1');
+            if (!params.get('type')) params.set('type', 'my');
             return params;
-        })
-
-    }, [searchParams])
+        });
+    }, [searchParams]);
 
     const handleSwitchTab = (value: 'my' | 'all') => {
-        setSearchParams(prev => {
+        setSearchParams((prev) => {
             const params = new URLSearchParams(prev);
             params.set('type', value);
             params.set('page', '1');
             return params;
-        })
-    }
+        });
+    };
 
     const handleSurveyAssign = (survey: Survey) => {
         setSurveyToAssign(survey);
-    }
+    };
 
     return (
-        <div className="flex-auto rounded-2xl bg-primary-50 overflow-y-auto p-16 space-y-10 flex flex-col">
+        <div className="w-full rounded-2xl bg-primary-50 overflow-y-auto p-16 space-y-10 flex flex-col">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
                     <h1 className="text-2xl md:text-3xl font-bold font-secondary text-primary-900">Surveys</h1>
                     <p className="text-primary-600 mt-1">Manage and explore available surveys</p>
                 </div>
-                <Button classes='flex items-center space-x-2'>
-                    <Link to='/surveys/create' className="flex items-center space-x-2">
+                <Button classes="flex items-center space-x-2">
+                    <Link to="/surveys/create" className="flex items-center space-x-2">
                         <span>+ Create Survey</span>
                     </Link>
                 </Button>
@@ -67,14 +56,20 @@ const SurveyPage = () => {
             <div className="border-b border-primary-200">
                 <div className="flex space-x-8">
                     <button
-                        className={`flex items-center space-x-2 cursor-pointer pb-3 px-1 font-medium ${surveyType === 'my' ? 'text-cyan-600 border-b-2 border-cyan-600' : 'text-primary-600 hover:text-primary-900'}`}
+                        className={`flex items-center space-x-2 cursor-pointer pb-3 px-1 font-medium ${surveyType === 'my'
+                                ? 'text-cyan-600 border-b-2 border-cyan-600'
+                                : 'text-primary-600 hover:text-primary-900'
+                            }`}
                         onClick={() => handleSwitchTab('my')}
                     >
                         <span>My Surveys</span>
                     </button>
 
                     <button
-                        className={`flex items-center space-x-2 cursor-pointer pb-3 px-1 font-medium ${surveyType === 'all' ? 'text-cyan-600 border-b-2 border-cyan-600' : 'text-primary-600 hover:text-primary-900'}`}
+                        className={`flex items-center space-x-2 cursor-pointer pb-3 px-1 font-medium ${surveyType === 'all'
+                                ? 'text-cyan-600 border-b-2 border-cyan-600'
+                                : 'text-primary-600 hover:text-primary-900'
+                            }`}
                         onClick={() => handleSwitchTab('all')}
                     >
                         <span>All Surveys</span>
@@ -84,7 +79,12 @@ const SurveyPage = () => {
 
             <div className="flex flex-col sm:flex-row gap-4 items-center">
                 <div className="relative flex-grow">
-                    <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-primary-400" fill="none" width={'18px'} height={'18px'} />
+                    <SearchIcon
+                        className="absolute left-3 top-1/2 transform -translate-y-1/2 text-primary-400"
+                        fill="none"
+                        width={'18px'}
+                        height={'18px'}
+                    />
                     <input
                         type="text"
                         placeholder="Search surveys..."
@@ -100,24 +100,21 @@ const SurveyPage = () => {
                 </button>
             </div>
 
-            <div className='flex-grow'>
-                {surveyType === 'my' ? (
-                    <CurrentUsersSurveysTab
-                        onClickAssign={handleSurveyAssign}
-                        debouncedSearchQuery={debouncedSearchQuery}
-                    />
-                ) : (
-                    <AllSurveysTab
-                        onClickAssign={handleSurveyAssign}
-                        debouncedSearchQuery={debouncedSearchQuery}
-                    />
-                )}
+            <div className="flex-grow">
+                <SurveysTab
+                    type={surveyType as 'my' | 'all'}
+                    onClickAssign={handleSurveyAssign}
+                    debouncedSearchQuery={debouncedSearchQuery}
+                />
             </div>
-            {surveyToAssign && <AssignSurveyModal
-                onClose={() => setSurveyToAssign(null)}
-                isOpen={surveyToAssign !== null}
-                surveyToAssign={surveyToAssign}
-            />}
+
+            {surveyToAssign && (
+                <AssignSurveyModal
+                    onClose={() => setSurveyToAssign(null)}
+                    isOpen={surveyToAssign !== null}
+                    surveyToAssign={surveyToAssign}
+                />
+            )}
         </div>
     );
 };

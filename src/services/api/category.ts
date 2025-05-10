@@ -24,6 +24,17 @@ export const fetchCategories = async (params: any): Promise<ApiResponse<Category
     }
 }
 
+export const getGroupCategoriesTree = async (): Promise<ApiResponse<Category[]>> => {
+    try {
+        await new Promise((resolve) => { setTimeout(resolve, 2000) });
+        const response = await api.get("/category/group-tree");
+        return handleSuccess(response.data, 'Groups category trees fetched successfully');
+    } catch (err) {
+        const defaultMessage = "Unable to fetch Groups category trees due to some internal reasons, please try again later";
+        return handleError(err, defaultMessage);
+    }
+}
+
 export const deleteCategory = async (params: any): Promise<ApiResponse<any>> => {
     try {
         await new Promise((resolve) => { setTimeout(resolve, 2000) });

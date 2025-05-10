@@ -8,7 +8,7 @@ import UserFormModal from "./UserFormModal";
 import { User, UserPayload } from "../../types/user";
 
 const defaultPage = 1;
-const defaultItemsPerPage = 10;
+const defaultItemsPerPage = 9;
 
 const UsersPage = () => {
 

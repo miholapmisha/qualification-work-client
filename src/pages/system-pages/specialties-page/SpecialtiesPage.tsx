@@ -10,8 +10,8 @@ import { useSpecialties } from "./SpecialtyProvider"
 
 const SpecialtiesPage = () => {
     const [openAddSpecialtyModal, setOpenAddSpecialtyModal] = useState(false);
-    
-    
+
+
     const {
         parentIdsCreatingCategories,
         fetchingCategories: loadingSpecialties,
@@ -22,6 +22,7 @@ const SpecialtiesPage = () => {
 
     const facultyData = categories ? categories[0] : undefined
     const specialties = categories?.slice(1) || []
+    const showMessageNoSpecialtiesYet = specialties && specialties.length <= 0 && !loadingSpecialties
 
     const handleSpecialtyCreation = (data: SpecialtyCreationData): Category[] => {
         const specialtyId = crypto.randomUUID();
@@ -84,7 +85,7 @@ const SpecialtiesPage = () => {
                     {loadingSpecialties && <div className="w-full h-full flex justify-center items-center">
                         <Loader size={{ width: '86px', height: '86px' }} />
                     </div>}
-                    {specialties?.length <= 0 && <h1 className="w-full h-full flex items-center justify-center text-center text-primary-300 text-4xl lowercase font-secondary">
+                    {showMessageNoSpecialtiesYet && <h1 className="w-full h-full flex items-center justify-center text-center text-primary-300 text-4xl lowercase font-secondary">
                         no specialties for faculty
                     </h1>}
                     <div className="space-y-1">

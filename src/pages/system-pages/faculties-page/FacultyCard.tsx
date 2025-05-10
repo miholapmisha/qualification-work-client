@@ -11,7 +11,6 @@ type FacultyCardProps = {
     faculty: Category,
     onEdit: (id: string, category: Category) => void
     onDelete: (id: string) => void
-    // onCancel: () => void
 }
 
 const FacultyCard = ({ faculty, onEdit, onDelete }: FacultyCardProps) => {
@@ -29,7 +28,7 @@ const FacultyCard = ({ faculty, onEdit, onDelete }: FacultyCardProps) => {
             onSaveFaculty={(facultyData) => { handleUpdateFaculty(facultyData) }} />
 
     return (
-        <div className="transition-discrete duration-200 ease-linear hover:scale-105 border-1 border-primary-400 w-full max-w-[456px] min-h-[128px] px-6 py-4 rounded-xl flex flex-col justify-between">
+        <div className="transition-discrete duration-200 ease-linear hover:scale-105 border-1 border-primary-400 w-full min-h-[128px] px-6 py-4 rounded-xl flex flex-col justify-between">
             <div className="w-full min-h-[60px] text-lg">
                 <div className="outline-none w-full min-h-15 ">{faculty.name}</div>
             </div>

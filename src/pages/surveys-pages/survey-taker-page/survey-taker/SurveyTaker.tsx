@@ -1,82 +1,75 @@
 import QuestionTaker from "./question-taker/QuestionTaker"
-import { CheckboxGrid, CheckboxGridAnswer, MultipleChoiceGrid, MultipleChoiceGridAnswer, MultipleChoiceQuestion, GeneralQuestionType, QuestionType, SingleChoiceQuestion, Survey, TextQuestion } from "../../../../types/survey"
+import { CheckboxGridAnswer, MultipleChoiceGridAnswer, GeneralQuestionType, QuestionType, Survey } from "../../../../types/survey"
+
 import { useState } from "react"
 import Button from "../../../../components/common/Button"
 import { useAlerts } from "../../../../components/alert/AlertsProvider"
+import { AnswersMap, QuestionAnswer } from "../../../../types/answer"
+import { useSurveyAnswersCache } from "../../../../hooks/useSurveysAnswersCache"
 
 type SurveyTakerProps = {
-    survey: Survey
+    survey: Survey,
+    onSubmit: (surveyId: string, answers: AnswersMap) => void
 }
 
-const SurveyTaker = ({ survey }: SurveyTakerProps) => {
+const SurveyTaker = ({ survey, onSubmit }: SurveyTakerProps) => {
 
     const { addAlert } = useAlerts()
-    const [surveyState, setSurveyState] = useState<Survey>(survey)
+    const { answers, updateAnswer, resetAnswers } = useSurveyAnswersCache(survey._id)
     const [invalidSubmit, setInvalidSubmit] = useState(false)
-    const invalidQuestionsIds = surveyState.questions
-        .filter((question) => question.required && !question.answer)
+
+    const invalidQuestionsIds = survey.questions
+        .filter((question) => question.required && !answers.has(question._id))
         .map((question) => question._id)
 
-    const chooseAnswer = (questionId: string, answer: string | string[] | MultipleChoiceGridAnswer[] | CheckboxGridAnswer[] | undefined) => {
+    const chooseAnswer = (questionId: string, answer: QuestionAnswer | undefined) => {
+        const question = survey.questions.find(q => q._id === questionId);
+        if (!question) return;
 
-        const questionIndex = surveyState.questions.findIndex(
-            (questionItem) => questionItem._id === questionId
-        );
-        if (questionIndex === -1) return;
+        if (answer === undefined) {
+            updateAnswer(questionId, undefined);
+        } else {
+            switch (question.type) {
+                case QuestionType.SINGLE_CHOICE:
+                case QuestionType.TEXT:
+                    updateAnswer(questionId, answer as string);
+                    break;
 
-        const question = surveyState.questions[questionIndex];
-        const updatedSurvey = { ...surveyState };
+                case QuestionType.MULTIPLE_CHOICE:
+                    updateAnswer(questionId, answer as string[]);
+                    break;
 
-        switch (question.type) {
-            case QuestionType.SINGLE_CHOICE:
-                updatedSurvey.questions[questionIndex] = {
-                    ...question,
-                    answer: answer as string,
-                } as SingleChoiceQuestion;
-                break;
+                case QuestionType.CHECKBOX_GRID:
+                    updateAnswer(questionId, answer as CheckboxGridAnswer);
+                    break;
 
-            case QuestionType.MULTIPLE_CHOICE:
-                updatedSurvey.questions[questionIndex] = {
-                    ...question,
-                    answer: answer as string[],
-                } as MultipleChoiceQuestion;
-                break;
+                case QuestionType.MULTIPLE_CHOICE_GRID:
+                    updateAnswer(questionId, answer as MultipleChoiceGridAnswer);
+                    break;
 
-            case QuestionType.TEXT:
-                updatedSurvey.questions[questionIndex] = {
-                    ...question,
-                    answer: answer as string,
-                } as TextQuestion;
-                break;
-
-            case QuestionType.CHECKBOX_GRID:
-                updatedSurvey.questions[questionIndex] = {
-                    ...question,
-                    answer: answer as CheckboxGridAnswer[],
-                } as CheckboxGrid;
-                break;
-
-            case QuestionType.MULTIPLE_CHOICE_GRID:
-                updatedSurvey.questions[questionIndex] = {
-                    ...question,
-                    answer: answer as MultipleChoiceGridAnswer[],
-                } as MultipleChoiceGrid;
-                break;
-
-            default:
-                break;
+                default:
+                    break;
+            }
         }
-
-        setSurveyState(updatedSurvey);
     };
 
     const handleSubmit = () => {
         if (invalidQuestionsIds.length > 0) {
-            addAlert({ id: crypto.randomUUID(), type: 'warning', message: 'Please fill all required questions.' })
+            addAlert({
+                id: crypto.randomUUID(),
+                type: 'warning',
+                message: 'Please fill all required questions.'
+            })
             setInvalidSubmit(true)
         } else {
             setInvalidSubmit(false)
+            onSubmit(survey._id, answers)
+            resetAnswers()
         }
+    }
+
+    const clearForm = () => {
+        resetAnswers();
     }
 
     return (
@@ -88,13 +81,13 @@ const SurveyTaker = ({ survey }: SurveyTakerProps) => {
                             <h1
                                 className="py-2 text-3xl md:text-4xl lg:text-5xl font-secondary font-bold flex-auto h-16 leading-none "
                             >
-                                {surveyState.title || "Untitled Survey"}
+                                {survey.title || "Untitled Survey"}
                             </h1>
                         </div>
                     </div>
 
                     <div className="space-y-2">
-                        {surveyState.description !== undefined &&
+                        {survey.description !== undefined &&
                             <p className="transition-colors font-secondary py-2">
                                 {survey.description}
                             </p>
@@ -106,9 +99,16 @@ const SurveyTaker = ({ survey }: SurveyTakerProps) => {
                     </div>
 
                     <div className="flex-grow flex-col items-center flex w-full space-y-8 py-6">
-
-                        {surveyState.questions.map((question) => (
-                            <QuestionTaker onChooseAnswer={chooseAnswer} error={invalidSubmit && invalidQuestionsIds.includes(question._id)} key={`${question._id}-${survey._id}`} question={question as GeneralQuestionType} />
+                        {survey.questions.map((question) => (
+                            <QuestionTaker
+                                onChooseAnswer={chooseAnswer}
+                                error={invalidSubmit && invalidQuestionsIds.includes(question._id)}
+                                key={`${question._id}-${survey._id}`}
+                                question={{
+                                    ...question,
+                                    answer: answers.get(question._id)
+                                } as GeneralQuestionType}
+                            />
                         ))}
 
                         <div className="self-center py-4 space-x-4">
@@ -117,23 +117,13 @@ const SurveyTaker = ({ survey }: SurveyTakerProps) => {
                             </Button>
                             <button
                                 className="ml-auto hover:bg-primary-300 text-primary-600 rounded cursor-pointer px-4 py-2 bg-primary-200"
-                                onClick={() => {
-                                    setSurveyState({
-                                        ...surveyState,
-                                        questions: surveyState.questions.map((question) => ({
-                                            ...question,
-                                            answer: undefined
-                                        })),
-                                    });
-                                }}
+                                onClick={clearForm}
                             >
                                 Clear form
                             </button>
                         </div>
-
                     </div>
                 </div>
-
             </div>
         </div>
     )

@@ -27,7 +27,7 @@ const NavigationSidebar = ({ defaultOptions, preferenceOptions }: SidebarProps) 
     }, [sidebarState.isExpanded])
 
     return (
-        <div className={`max-h-screen sticky top-0 ${sidebarState.isExpanded ? 'w-[256px] px-8' : 'w-15 px-2'
+        <div className={`max-h-screen w-full sticky top-0 ${sidebarState.isExpanded ? 'max-w-[256px] px-8' : 'max-w-15 px-2'
             } bg-primary-50 flex flex-col rounded-r-2xl py-8  transition-all duration-400 ease-in-out space-y-8`}>
             <div className='flex justify-center items-center'>
                 <SidebarIcon

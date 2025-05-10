@@ -32,7 +32,12 @@ const queryClient = new QueryClient({
     onSettled: (data, _, __) => {
       createAlertEvent(data as ApiResponse);
     }
-  })
+  }),
+  defaultOptions: {
+    queries: {
+        
+    }
+  }
 })
 
 const App = () => {
