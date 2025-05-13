@@ -10,10 +10,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteSurvey } from "../../../services/api/surveys";
 import { useAlerts } from "../../../components/alert/AlertsProvider";
 import Button from "../../../components/common/Button";
-import { formatDate } from "../../../util/date";
 import { useProceedingIds } from "../../../hooks/useProcessingIds";
 import { SURVEY_ASSIGN_CACHE_KEY } from "./AssignSurveyModal";
 import AnalyticsIcon from "../../../components/common/icons/AnalyticsIcon";
+import { formatDate } from "../../../util";
 
 type SurveyCartProps = {
     isOwner: boolean;

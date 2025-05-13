@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import Button from "../../components/common/Button";
 import { Assign } from "../../types/assign";
-import { formatDate } from "../../util/date";
+import { formatDate } from "../../util";
 
 type AssignCardProps = {
     assign: Assign

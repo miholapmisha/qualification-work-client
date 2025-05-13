@@ -29,7 +29,6 @@ const Modal = ({ children, isOpen, onClose }: ModalProps) => {
                             backdrop:bg-black/30
                             bg-white rounded-lg shadow-lg"
             ref={modalRef} onClose={() => onClose()}>
-
             {isOpen ? children : null}
         </dialog>,
         modalContainer

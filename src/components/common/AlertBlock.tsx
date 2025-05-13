@@ -24,8 +24,8 @@ const AlertBlock = ({ alertMessage, onCloseAlert, absolute = false }: AlertBlock
     }, [alertMessage])
 
     const alert = (<div className={`${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-1.5'} transition-all 
-                                    ${absolute ? 'right-2 top-2 max-w-[456px]' : ''}
-                                    duration-400 absolute w-full 
+                                    ${absolute ? 'absolute right-2 top-2 max-w-[456px]' : ''}
+                                    duration-400 w-full 
                                     flex space-x-2 items-start justify-between 
                                     p-4 bg-red-600 border 
                                     text-white rounded-lg`} role="alert">

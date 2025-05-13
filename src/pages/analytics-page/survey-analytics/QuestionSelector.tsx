@@ -21,7 +21,7 @@ const QuestionSelector = ({ questions, selectedQuestionId, onQuestionChange }: Q
             >
                 {questions.map((question) => (
                     <option key={question._id} value={question._id}>
-                        {question.questionText}
+                        {question.questionText ? question.questionText : "Untitled question"}
                     </option>
                 ))}
             </select>

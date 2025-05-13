@@ -1,17 +1,17 @@
 import { createContext, PropsWithChildren, useContext, useState } from "react"
-import Alert, { AlertType } from "./Alert"
-import { createPortal } from "react-dom"
+import { AlertType } from "./Alert"
+import AlertsWrapper from "./AlertsWrapper"
 
 type AlertContextType = {
-    addAlert: (alert: AlertType) => void
+    alerts: AlertType[]
+    addAlert: (alert: AlertType) => void,
+    removeAlert: (alert: AlertType) => void
 }
 
 const AlertContext = createContext<AlertContextType | undefined>(undefined)
 
 const AlertsProvider = ({ children }: PropsWithChildren) => {
     const [alerts, setAlerts] = useState<AlertType[]>([])
-    const alertContainer = document.getElementById('alert-container')
-
     const addAlert = (alert: AlertType) => {
         setAlerts(prevAlerts => [...prevAlerts, alert])
     }
@@ -21,17 +21,9 @@ const AlertsProvider = ({ children }: PropsWithChildren) => {
     }
 
     return (
-        <AlertContext.Provider value={{ addAlert }}>
+        <AlertContext.Provider value={{ addAlert, removeAlert, alerts }}>
             {children}
-            {alertContainer &&
-                createPortal(
-                    <div className="z-10 absolute top-0 right-2 space-y-2">
-                        {alerts.map(alert => (
-                            <Alert key={alert.id} alert={alert} onClose={(alert) => removeAlert(alert)} />
-                        ))}
-                    </div>,
-                    alertContainer
-                )}
+            <AlertsWrapper alerts={alerts} />,
         </AlertContext.Provider>
     )
 }
